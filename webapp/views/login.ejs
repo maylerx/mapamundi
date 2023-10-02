@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Mapa de egresados | Login</title>
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="css/signin.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container text-center d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="row">
+      <div class="col-sm-12 col-md-16 col-lg-20 shadow-lg p-3 mb-5 bg-white rounded mx-auto">
+        <div class="card">
+          <div class="card-header text-white" style="background-color: #348414;">Ingresar</div>
+          <div class="card-body">
+            <form id="formLogin" action="/login" method="POST">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="user" name="user" placeholder="User">
+                <label for="user">Nombre de Usuario</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="pass" name="pass" placeholder="Password">
+                <label for="pass">Contraseña</label>
+              </div>
+          </div>
+            <div class="card-footer bg-transparent">
+              <a href="/register" type="button" class="btn btn-secondary">Registrarse</a>
+              <button type="submit" class="btn text-white" style="background-color: #348414;">Ingresar</button>
+            </div>
+            </form>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <% if(alert) { %>
+    <script>
+      Swal.fire({
+        title: '<%= alertTitle %>',
+        text: '<%= alertMessage %>',
+        icon: '<%= alertIcon %>',
+        showConfirmButton: <%= showConfirmButton %>,
+        timer: <%= timer %>
+      }).then(() => {
+          window.location = '/<%= ruta %>'
+        })
+    </script>
+    <% } %>
+
+</body>
+
+</html>

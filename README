@@ -1,0 +1,5 @@
+# Instalar los modulos (dentro de webapp)
+npm i
+
+# Correr la app (dentro de webapp)
+node app

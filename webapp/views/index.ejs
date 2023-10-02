@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mapa de egresados</title>
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link href="css/map.css" rel="stylesheet">
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+
+<body>
+
+  <!-- Sidebar de opciones  -->
+  <div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar" class="active">
+      <div class="custom-menu">
+        <button type="button" id="sidebarCollapse" class="btn btn-primary">
+          <i class=" fa fa-bars"></i>
+          <span class="sr-only">Menu</span>
+        </button>
+      </div>
+      <div class="p-4">
+        <h3><a href="" class="logo">Mapa de Egresados</a></h3>
+        <ul class="list-unstyled components mb-5">
+          <li class="active">
+            <a href="#"><span class="fa fa-home mr-3"></span> Mapa</a>
+          </li>
+          <li>
+            <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></span>
+              Agregar egresado</a>
+          </li>
+        </ul>
+
+        <div class="mb-5">
+          <a type="button" class="px-3 btn btn-secondary m-2" href="logout">Salir</a>
+        </div>
+
+        <div class="footer">
+          <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;
+            <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with
+            <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
+              target="_blank">Colorlib.com</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          </p>
+        </div>
+
+      </div>
+    </nav>
+
+    <!-- Contenido principal  -->
+    <div id="content" class="p-4 p-md-5 pt-5">
+      <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <h3>Bienvenido:</h3>
+              <h3>
+                <% if (user) { %>
+                  <span class="badge" style="background-color: #3BD10B;">
+                    <%= user.name %>
+                  </span>
+                  <% } %>
+              </h3>
+            </div>
+            <div class="col">
+              <h3>Búsqueda de egresados: </h3>
+              <input id="egresado_buscar" name="egresado_buscar" type="text" class="form-control"
+                placeholder="Ingresa el nombre completo del egresado">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mapa -->
+      <div id="map"></div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Egresado</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="card">
+                <div class="card-body">
+                  <form id="formNuevoEgresado" action="/agregarEgresado" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                      <label for="nombres" class="form-label">Nombres</label>
+                      <input id="nombres" name="nombres" type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                      <label for="apellidos" class="form-label">Apellidos</label>
+                      <input id="apellidos" name="apellidos" type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                      <label for="imagen" class="form-label">Imagen de perfil</label>
+                      <input id="imagen" name="imagen" type="file" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                      <label for="coord_x" class="form-label">Coordenada X</label>
+                      <input id="coord_x" name="coord_x" type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                      <label for="coord_y" class="form-label">Coordenada Y</label>
+                      <input id="coord_y" name="coord_y" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn text-white" style="background-color: #348414;">Agregar</button>
+                </div>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+    integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+    crossorigin="anonymous"></script>
+  <script src="js/map.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <% if(alert) { %>
+    <script>
+      Swal.fire({
+        title: '<%= alertTitle %>',
+        text: '<%= alertMessage %>',
+        icon: '<%= alertIcon %>',
+        showConfirmButton: <%= showConfirmButton %>,
+        timer: <%= timer %>
+      }).then(() => {
+          window.location = '/<%= ruta %>'
+        })
+    </script>
+    <% } %>
+</body>
+
+</html>

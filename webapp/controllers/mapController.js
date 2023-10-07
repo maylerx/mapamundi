@@ -3,8 +3,14 @@ const uploadImage = require('./cloudinaryController');
 
 exports.coordenadas = async (req, res) => {
     try {
+        let query = ''
+        if(req.userRole === 1){
+            query = 'SELECT nombres, apellidos, imagen_url, coord_x, coord_y FROM egresados'
+        }else{
+            query = 'SELECT nombres, apellidos, coord_x, coord_y FROM egresados'
+        }
         const results = await new Promise((resolve, reject) => {
-            conexion.query('SELECT nombres, apellidos, imagen_url, coord_x, coord_y FROM egresados', (error, results) => {
+            conexion.query(query, (error, results) => {
                 if (error) {
                     reject(error);
                 } else {

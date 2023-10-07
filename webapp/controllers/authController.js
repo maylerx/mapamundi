@@ -67,6 +67,7 @@ exports.login = async (req, res) => {
             })
         } else {
             conexion.query('SELECT * FROM users WHERE user = ?', [user], async (error, results) => {
+                // Validacion de usuario con credenciales incorrectas
                 if (results.length == 0 || !(await bcryptjs.compare(pass, results[0].pass))) {
                     res.render('login', {
                         alert: true,
@@ -78,15 +79,15 @@ exports.login = async (req, res) => {
                         ruta: 'login'
                     })
                 } else {
-                    //inicio de sesión OK
+                    // Inicio de sesión OK
                     const id = results[0].id
-                    const token = jwt.sign({ id: id }, process.env.JWT_SECRETO, {
+                    const token = jwt.sign({ id: id}, process.env.JWT_SECRETO, {
                         expiresIn: process.env.JWT_TIEMPO_EXPIRA
                     })
-                    //generamos el token SIN fecha de expiracion
-                    //const token = jwt.sign({id: id}, process.env.JWT_SECRETO)
+
                     console.log("TOKEN: " + token + " para el USUARIO : " + user)
 
+                    // Definicion de opciones de la cookie como fecha de expiracion y httpOnly
                     const cookiesOptions = {
                         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
                         httpOnly: true
@@ -120,7 +121,7 @@ exports.isAuthenticated = async (req, res, next) => {
                 return next()
             })
         } catch (error) {
-            console.log(error)
+            console.log("ERROR: " + error + " en la autenticacion")
             res.redirect('/login')
         }
     } else {

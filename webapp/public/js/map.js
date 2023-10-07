@@ -5,7 +5,7 @@ const pinesEgresados = async () => {
         console.log("Datos de coordenadas: \n" + data)
         return data
     } catch (error) {
-        console.log("Error en map.js"+error)
+        console.log("Error en map.js" + error)
     }
 }
 
@@ -20,12 +20,15 @@ pinesEgresados().then((egresados) => {
     egresados.forEach((egresado) => {
         L.marker([egresado.coord_x, egresado.coord_y]).addTo(map)
             .bindPopup('Egresado: ' + egresado.nombres + ' ' + egresado.apellidos +
-                '<br><br><div style="text-align: center;"><img src="' + egresado.imagen_url + '" alt="La foto de usuario no está disponible" style= "widht: 80px; height: 80px;"></div>');
+                '<br><br><div style="text-align: center;"><img src="' 
+                + egresado.imagen_url + 
+                '" alt="La foto de usuario no está disponible y sólo la pueden observar los administradores" '+
+                'style= "widht: 80px; height: 80px;"></div>');
     });
 });
 
 // Para la busqueda de egresados
-document.getElementById('egresado_buscar').addEventListener('keydown', function(event) {
+document.getElementById('egresado_buscar').addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
         event.preventDefault(); // Previene el comportamiento por defecto del Enter en un formulario
         buscarEgresado(this.value);
@@ -36,13 +39,13 @@ function buscarEgresado(nombreCompleto) {
     pinesEgresados().then((egresados) => {
         var encontrado = false;
         egresados.forEach((egresado) => {
-            if ((egresado.nombres + ' ' + egresado.apellidos).toLowerCase().replace(/\s/g, '')===nombreCompleto.toLowerCase().replace(/\s/g, '')) {
+            if ((egresado.nombres + ' ' + egresado.apellidos).toLowerCase().replace(/\s/g, '') === nombreCompleto.toLowerCase().replace(/\s/g, '')) {
                 map.flyTo([egresado.coord_x, egresado.coord_y], 16);
                 L.map.getElementById().bindPopup().openPopup();
                 encontrado = true;
             }
         });
-        if(encontrado==false){
+        if (encontrado == false) {
             alert("No se encontró el egresado")
         }
     });

@@ -33,10 +33,14 @@
           <li class="active">
             <a href="#"><span class="fa fa-home mr-3"></span> Mapa</a>
           </li>
-          <li>
-            <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></span>
-              Agregar egresado</a>
-          </li>
+              <!-- Visualizacion de opción agregar egresado solo para ADMIN-->
+          <% if (user.rol_id === 1) {%>
+            <li>
+              <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Agregar egresado
+              </a>
+            </li>
+          <% } %>
         </ul>
 
         <div class="mb-5">
@@ -144,6 +148,8 @@
     integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
     crossorigin="anonymous"></script>
   <script src="js/map.js"></script>
+
+  <!-- Alertas -->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <% if(alert) { %>
     <script>
@@ -158,6 +164,7 @@
         })
     </script>
     <% } %>
+    
 </body>
 
 </html>

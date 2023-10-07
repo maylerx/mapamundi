@@ -2,13 +2,25 @@
 CREATE DATABASE IF NOT EXISTS egresadosdb;
 USE egresadosdb;
 
+-- Crear la tabla rol
+CREATE TABLE IF NOT EXISTS rol(
+    -> id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    -> rol VARCHAR(7) NOT NULL UNIQUE);
+
+-- Insertar roles
+INSERT INTO rol (rol) VALUES ('admin'), ('user');
+
 -- Crear la tabla users
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user VARCHAR(255) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
-    pass VARCHAR(255) NOT NULL
+    pass VARCHAR(255) NOT NULL,
+    rol_id BIGINT NOT NULL,
+    FOREIGN KEY (rol_id) REFERENCES rol(id)
 );
+
+INSERT INTO users (user, name, pass, rol_id) VALUES ('admin', 'Administrador', 'admin', 1);
 
 -- Crear la tabla egresados
 CREATE TABLE IF NOT EXISTS egresados (

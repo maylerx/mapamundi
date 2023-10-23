@@ -3,7 +3,7 @@ const bcryptjs = require('bcryptjs')
 const conexion = require('../database/db')
 const { promisify } = require('util')
 
-//procedimiento para registrarnos
+// Funcion de registro de usuarios (Todos con rol usuario)
 exports.register = async (req, res) => {
     try {
         const name = req.body.name
@@ -50,6 +50,7 @@ exports.register = async (req, res) => {
     }
 }
 
+// Funcion de login de usuarios
 exports.login = async (req, res) => {
     try {
         const user = req.body.user

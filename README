@@ -5,3 +5,5 @@ npm i
 
 # Correr la app (dentro de webapp)
 node app
+
+# Para ingresar como admin ingresar en user: "admin" , password: "admin"

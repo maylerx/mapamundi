@@ -4,7 +4,7 @@ const uploadImage = require('./cloudinaryController');
 exports.coordenadas = async (req, res) => {
     try {
         let query = ''
-        if(req.userRole === 1){
+        if(req.rol_id === 1){
             query = 'SELECT nombres, apellidos, imagen_url, coord_x, coord_y FROM egresados'
         }else{
             query = 'SELECT nombres, apellidos, coord_x, coord_y FROM egresados'
@@ -29,8 +29,7 @@ exports.agregarEgresado = async (req, res) => {
     try {
         const { nombres, apellidos, coord_x, coord_y } = req.body;
         if (!nombres || !apellidos || !coord_x || !coord_y) {
-            res.render('index', {
-                user: req.user,
+            res.json({
                 alert: true,
                 alertTitle: "Advertencia",
                 alertMessage: "Ingrese todos los campos",
@@ -38,7 +37,7 @@ exports.agregarEgresado = async (req, res) => {
                 showConfirmButton: true,
                 timer: false,
                 ruta: ''
-            })
+            });
         } else {
             const tempFilePath = req.files.imagen.tempFilePath;
             const result = await uploadImage(tempFilePath);
@@ -52,8 +51,7 @@ exports.agregarEgresado = async (req, res) => {
                 coord_y: coord_y
             }, (error) => {
                 if (error) {
-                    res.render('index', {
-                        user: req.user,
+                    res.json({
                         alert: true,
                         alertTitle: "Error",
                         alertMessage: "Ha ocurrido un error al agregar el egresado",
@@ -61,10 +59,9 @@ exports.agregarEgresado = async (req, res) => {
                         showConfirmButton: true,
                         timer: false,
                         ruta: ''
-                    })
+                    });
                 } else {
-                    res.render('index', {
-                        user: req.user,
+                    res.json({
                         alert: true,
                         alertTitle: "Proceso exitoso",
                         alertMessage: "El egresado se ha agregado correctamente",
@@ -72,13 +69,12 @@ exports.agregarEgresado = async (req, res) => {
                         showConfirmButton: false,
                         timer: 800,
                         ruta: ''
-                    })
+                    });
                 }
             });
         }
     } catch (error) {
-        res.render('index', {
-            user: req.user,
+        res.json({
             alert: true,
             alertTitle: "Error",
             alertMessage: error,
@@ -86,6 +82,6 @@ exports.agregarEgresado = async (req, res) => {
             showConfirmButton: true,
             timer: false,
             ruta: ''
-        })
+        });
     }
 }

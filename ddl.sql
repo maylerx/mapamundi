@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
     user VARCHAR(255) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     pass VARCHAR(255) NOT NULL,
-    rol_id BIGINT NOT NULL,
+    rol_id BIGINT NOT NULL DEFAULT 2,
     FOREIGN KEY (rol_id) REFERENCES rol(id)
 );
 

@@ -34,7 +34,7 @@
             <a href="#"><span class="fa fa-home mr-3"></span> Mapa</a>
           </li>
               <!-- Visualizacion de opción agregar egresado solo para ADMIN-->
-          <% if (user.rol_id === 1) {%>
+          <% if (user.rol_id === 1){%>
             <li>
               <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 Agregar egresado
@@ -137,6 +137,7 @@
   </div>
 
   <script src="js/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/main.js"></script>
@@ -149,21 +150,57 @@
     crossorigin="anonymous"></script>
   <script src="js/map.js"></script>
 
+  <script>
+    $(document).ready(function() {
+      $('#formNuevoEgresado').submit(function(event) {
+        event.preventDefault(); // Evita que se envíe el formulario de forma tradicional
+        
+        var formData = new FormData(this); // Obtiene los datos del formulario
+        
+        $.ajax({
+          type: 'POST',
+          url: '/agregarEgresado',
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function(data) {
+            if (data.alert) {
+              Swal.fire({
+                title: data.alertTitle,
+                text: data.alertMessage,
+                icon: data.alertIcon,
+                showConfirmButton: data.showConfirmButton,
+                timer: data.timer
+              }).then(() => {
+                window.location = '/' + data.ruta;
+              });
+            }
+          },
+          error: function(error) {
+            // Manejar errores
+          }
+        });
+      });
+    });
+  </script>  
+
   <!-- Alertas -->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <% if(alert) { %>
     <script>
-      Swal.fire({
-        title: '<%= alertTitle %>',
-        text: '<%= alertMessage %>',
-        icon: '<%= alertIcon %>',
-        showConfirmButton: <%= showConfirmButton %>,
-        timer: <%= timer %>
-      }).then(() => {
-          window.location = '/<%= ruta %>'
-        })
+      document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+          title: '<%= alertTitle %>',
+          text: '<%= alertMessage %>',
+          icon: '<%= alertIcon %>',
+          showConfirmButton: <%= showConfirmButton %>,
+          timer: <%= timer %>
+        }).then(() => {
+            window.location = '/<%= ruta %>'
+        });
+      });
     </script>
-    <% } %>
+  <% } %>
     
 </body>
 

@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
                         res.render('register', {
                             alert: true,
                             alertTitle: "Advertencia",
-                            alertMessage: "Ya existe un usuario con ese nombre de usuario",
+                            alertMessage: error.sqlMessage,
                             alertIcon: 'info',
                             showConfirmButton: true,
                             timer: false,

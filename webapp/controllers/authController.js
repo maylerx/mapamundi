@@ -18,7 +18,7 @@ exports.register = async (req, res) => {
                 alertIcon: 'info',
                 showConfirmButton: true,
                 timer: false,
-                ruta: '/register'
+                ruta: 'register'
             })
         } else {
             conexion.query('INSERT INTO users SET ?', { user: user, name: name, pass: passHash }, async (error, results) => {
@@ -35,7 +35,7 @@ exports.register = async (req, res) => {
                         alertIcon: 'info',
                         showConfirmButton: true,
                         timer: false,
-                        ruta: '/register'
+                        ruta: 'register'
                     });
                 } else {
                     res.render('pages/register', {
@@ -65,11 +65,11 @@ exports.login = async (req, res) => {
             res.render('pages/login', {
                 alert: true,
                 alertTitle: "Advertencia",
-                alertMessage: "Ingrese un usuario y password",
+                alertMessage: "Ingrese un usuario y constraseña",
                 alertIcon: 'info',
                 showConfirmButton: true,
                 timer: false,
-                ruta: '/login'
+                ruta: 'login'
             })
         } else {
             conexion.query('SELECT * FROM users WHERE user = ?', [user], async (error, results) => {
@@ -82,7 +82,7 @@ exports.login = async (req, res) => {
                         alertIcon: 'error',
                         showConfirmButton: true,
                         timer: false,
-                        ruta: '/login'
+                        ruta: 'login'
                     })
                 } else {
                     // Inicio de sesión OK
@@ -128,10 +128,10 @@ exports.isAuthenticated = async (req, res, next) => {
             })
         } catch (error) {
             console.log("ERROR: " + error + " en la autenticacion")
-            res.redirect('/login')
+            res.redirect('login')
         }
     } else {
-        res.redirect('/login')
+        res.redirect('login')
     }
 }
 

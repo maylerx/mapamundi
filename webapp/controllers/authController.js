@@ -11,38 +11,43 @@ exports.register = async (req, res) => {
         const pass = req.body.pass
         let passHash = await bcryptjs.hash(pass, 8)
         if (!user || !name || !pass) {
-            res.render('register', {
+            res.render('pages/register', {
                 alert: true,
                 alertTitle: "Advertencia",
                 alertMessage: "Ingrese su nombre de usuario, nombre completo y contraseña",
                 alertIcon: 'info',
                 showConfirmButton: true,
                 timer: false,
-                ruta: ''
+                ruta: '/register'
             })
         } else {
             conexion.query('INSERT INTO users SET ?', { user: user, name: name, pass: passHash }, async (error, results) => {
                 if (error) {
-                        res.render('register', {
-                            alert: true,
-                            alertTitle: "Advertencia",
-                            alertMessage: error.sqlMessage,
-                            alertIcon: 'info',
-                            showConfirmButton: true,
-                            timer: false,
-                            ruta: ''
-                        });
-                    } else {
-                        res.render('register', {
-                            alert: true,
-                            alertTitle: "Registro exitoso",
-                            alertMessage: "¡REGISTRO CORRECTO!",
-                            alertIcon: 'success',
-                            showConfirmButton: false,
-                            timer: 1500,
-                            ruta: ''
-                        });
+                    if(error.sqlMessage.includes("Duplicate entry")){
+                        mensaje = "El nombre de usuario ya está en uso";
+                    }else{
+                        mensaje = "Ha ocurrido un error inesperado";
                     }
+                    res.render('pages/register', {
+                        alert: true,
+                        alertTitle: "Advertencia",
+                        alertMessage: mensaje,
+                        alertIcon: 'info',
+                        showConfirmButton: true,
+                        timer: false,
+                        ruta: '/register'
+                    });
+                } else {
+                    res.render('pages/register', {
+                        alert: true,
+                        alertTitle: "Registro exitoso",
+                        alertMessage: "¡REGISTRO CORRECTO!",
+                        alertIcon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        ruta: ''
+                    });
+                }
             });
         }
     } catch (error) {
@@ -57,27 +62,27 @@ exports.login = async (req, res) => {
         const pass = req.body.pass
 
         if (!user || !pass) {
-            res.render('login', {
+            res.render('pages/login', {
                 alert: true,
                 alertTitle: "Advertencia",
                 alertMessage: "Ingrese un usuario y password",
                 alertIcon: 'info',
                 showConfirmButton: true,
                 timer: false,
-                ruta: 'login'
+                ruta: '/login'
             })
         } else {
             conexion.query('SELECT * FROM users WHERE user = ?', [user], async (error, results) => {
                 // Validacion de usuario con credenciales incorrectas
                 if (results.length == 0 || !(await bcryptjs.compare(pass, results[0].pass))) {
-                    res.render('login', {
+                    res.render('pages/login', {
                         alert: true,
                         alertTitle: "Error",
                         alertMessage: "Usuario y/o Password incorrectas",
                         alertIcon: 'error',
                         showConfirmButton: true,
                         timer: false,
-                        ruta: 'login'
+                        ruta: '/login'
                     })
                 } else {
                     // Inicio de sesión OK
@@ -95,7 +100,7 @@ exports.login = async (req, res) => {
                     }
                     res.cookie('jwt', token, cookiesOptions)
 
-                    res.render('login', {
+                    res.render('pages/login', {
                         alert: true,
                         alertTitle: "Conexión exitosa",
                         alertMessage: "¡LOGIN CORRECTO!",

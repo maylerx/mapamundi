@@ -7,13 +7,13 @@ const checkRoleMiddleware = require('../middlewares/checkRolMiddleware');
 
 //router para las vistas
 router.get('/', authController.isAuthenticated, (req, res)=>{    
-    res.render('index', {user:req.user, alert:false})
+    res.render('pages/index', {user:req.user, alert:false})
 })
 router.get('/login', (req, res)=>{
-    res.render('login', {alert:false})
+    res.render('pages/login', {alert:false})
 })
 router.get('/register', (req, res)=>{
-    res.render('register', {alert:false})
+    res.render('pages/register', {alert:false})
 })
 
 //router para los métodos del controller

@@ -1,0 +1,73 @@
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title fs-5"><%= form_tittle %></h1>
+    </div>
+    <div class="card-body">
+        <form id="formNuevoEgresado" action="/agregarEgresado" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="nombres" class="form-label">Nombres</label>
+                <input id="nombres" name="nombres" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="apellidos" class="form-label">Apellidos</label>
+                <input id="apellidos" name="apellidos" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección</label>
+                <input id="direccion" name="direccion" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="selectPais">País</label>
+                <select class="form-control" id="selectPais"></select>
+            </div>
+        
+            <div class="form-group">
+            <label for="selectDepartamento">Departamento</label>
+            <select class="form-control" id="selectDepartamento"></select>
+            </div>
+        
+            <div class="form-group">
+            <label for="selectCiudad">Ciudad</label>
+            <select class="form-control" id="selectCiudad"></select>
+            </div>
+            <div class="mb-3">
+                <label for="inputEmail" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp">
+            </div>
+            <div class="form-group">
+                <label for="graduacionyear">Año</label>
+                <select class="form-control" id="graduacionyear">
+                    <!-- Script JavaScript llenará las opciones automáticamente -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="carreracursada">Carrera Cursada</label>
+                <select class="form-control" id="carreracursada">
+                    <!-- Script JavaScript llenará las opciones automáticamente -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="imagen" class="form-label">Imagen de perfil</label>
+                <input id="imagen" name="imagen" type="file" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="coord_x" class="form-label">Coordenada X</label>
+                <input id="coord_x" name="coord_x" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="coord_y" class="form-label">Coordenada Y</label>
+                <input id="coord_y" name="coord_y" type="text" class="form-control">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="datospublicos">
+                <label class="form-check-label" for="datospublicos">
+                    ¿Desea que sus datos sean públicos?
+                </label>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-secondary mr-2">Cancelar</button>
+                <button type="submit" class="btn btn-success">Agregar</button>
+            </div>
+        </form>
+    </div>
+</div>

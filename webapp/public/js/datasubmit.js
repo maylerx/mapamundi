@@ -24,7 +24,7 @@ $(document).ready(function () {
                 }
             },
             error: function (error) {
-                // Manejar errores
+                console.log(error);
             }
         });
     });
@@ -33,7 +33,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     var anioActual = new Date().getFullYear();
     for (var i = anioActual; i >= 1962; i--) {
-        $('#graduacionyear').append('<option value="' + i + '">' + i + '</option>');
+        $('#year').append('<option value="' + i + '">' + i + '</option>');
     }
 });
 
@@ -100,7 +100,7 @@ $(document).ready(function () {
         "Zootecnia"
     ];
     for (var i = 0; i < programas.length; i++) {
-        $('#carreracursada').append('<option value="' + i + '">' + programas[i] + '</option>');
+        $('#carrera_cursada').append('<option value="' + (i+1) + '">' + programas[i] + '</option>');
     }
 });
 
@@ -112,7 +112,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (data) {
                 for (let i = 0; i < data.geonames.length; i++) {
-                    $('#selectPais').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].countryName}</option>`);
+                    $('#pais').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].countryName}</option>`);
                 }
             }
         });
@@ -120,14 +120,14 @@ $(document).ready(function () {
 
     // Función para cargar los departamentos según el país seleccionado
     function cargarDepartamentos(paisId) {
-        $('#selectDepartamento').empty();
+        $('#departamento').empty();
         $.ajax({
             url: `http://api.geonames.org/childrenJSON?geonameId=${paisId}&username=sebasbp`,
             dataType: 'json',
             success: function (data) {
                 for (let i = 0; i < data.geonames.length; i++) {
                     if (data.geonames[i].fcode === 'ADM1') {
-                        $('#selectDepartamento').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
+                        $('#departamento').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
                     }
                 }
             }
@@ -136,14 +136,14 @@ $(document).ready(function () {
 
     // Función para cargar las ciudades según el departamento seleccionado
     function cargarCiudades(deptoId) {
-        $('#selectCiudad').empty();
+        $('#ciudad').empty();
         $.ajax({
             url: `http://api.geonames.org/childrenJSON?geonameId=${deptoId}&username=sebasbp`,
             dataType: 'json',
             success: function (data) {
                 for (let i = 0; i < data.geonames.length; i++) {
                     if (data.geonames[i].fcode === 'ADM2') {
-                        $('#selectCiudad').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
+                        $('#ciudad').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
                     }
                 }
             }
@@ -154,13 +154,13 @@ $(document).ready(function () {
     cargarPaises();
 
     // Evento cuando se selecciona un país
-    $('#selectPais').on('change', function () {
+    $('#pais').on('change', function () {
         const paisId = $(this).val();
         cargarDepartamentos(paisId);
     });
 
     // Evento cuando se selecciona un departamento
-    $('#selectDepartamento').on('change', function () {
+    $('#departamento').on('change', function () {
         const deptoId = $(this).val();
         cargarCiudades(deptoId);
     });

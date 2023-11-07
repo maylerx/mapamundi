@@ -1,8 +1,8 @@
 const pinesEgresados = async () => {
     try {
-        const response = await fetch('/coordenadas')
+        const response = await fetch('/datosEgresados')
         const data = await response.json()
-        console.log("Datos de coordenadas: \n" + data)
+        console.log("Datos de egresados: \n" + data)
         return data
     } catch (error) {
         console.log("Error en map.js" + error)
@@ -19,11 +19,20 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 pinesEgresados().then((egresados) => {
     egresados.forEach((egresado) => {
         L.marker([egresado.coord_x, egresado.coord_y]).addTo(map)
-            .bindPopup('Egresado: ' + egresado.nombres + ' ' + egresado.apellidos +
-                '<br><br><div style="text-align: center;"><img src="' 
+            .bindPopup('<h5>Información de Egresado</h5>'+
+                '<strong>Nombre Completo: </strong>' + egresado.nombres + ' ' + egresado.apellidos +
+                '<br><strong>Direccion: </strong>'+ egresado.direccion +
+                '<br><strong>País: </strong>'+ egresado.pais +
+                '<br><strong>Departamento: </strong>'+ egresado.departamento +
+                '<br><strong>Ciudad: </strong>'+ egresado.ciudad +
+                '<br><strong>Email: </strong>'+ egresado.email +
+                '<br><strong>Año de Graduación: </strong>'+ egresado.year_graduacion +
+                '<br><strong>Carrera Cursada: </strong>'+ egresado.carrera_cursada +
+                '<br><strong>Portafolio: </strong><a href="'+egresado.portafolio_url+'">'+ egresado.portafolio_url +
+                '</a><br><br><div style="text-align: center;"><img src="' 
                 + egresado.imagen_url + 
                 '" alt="La foto de usuario no está disponible y sólo la pueden observar los administradores" '+
-                'style= "widht: 80px; height: 80px;"></div>');
+                'style= "widht: 100px; height: 100px;"></div>');
     });
 });
 

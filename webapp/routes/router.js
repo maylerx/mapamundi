@@ -21,6 +21,6 @@ router.post('/register', authController.register)
 router.post('/login', authController.login)
 router.post('/agregarEgresado', mapController.agregarEgresado)
 router.get('/logout', authController.logout)
-router.get('/coordenadas', checkRoleMiddleware, mapController.coordenadas);
+router.get('/datosEgresados', checkRoleMiddleware, mapController.datosEgresados);
 
 module.exports = router

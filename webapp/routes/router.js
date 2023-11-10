@@ -3,6 +3,7 @@ const router = express.Router()
 
 const authController = require('../controllers/authController')
 const mapController = require('../controllers/mapController')
+const exportController = require('../controllers/exportController');
 const checkRoleMiddleware = require('../middlewares/checkRolMiddleware');
 
 //router para las vistas
@@ -22,5 +23,6 @@ router.post('/login', authController.login)
 router.post('/agregarEgresado', mapController.agregarEgresado)
 router.get('/logout', authController.logout)
 router.get('/datosEgresados', checkRoleMiddleware, mapController.datosEgresados);
+router.get('/exportar', exportController.exportar);
 
 module.exports = router

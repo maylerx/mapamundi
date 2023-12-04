@@ -65,6 +65,7 @@ exports.agregarEgresado = async (req, res) => {
             || !direccion || !pais || !departamento || !ciudad
             || !year || !carrera_cursada || !portafolio_url
             || req.files.imagen === null) {
+            console.log("Advertencia: Ingresar todos los campos");
             res.json({
                 alert: true,
                 alertTitle: "Advertencia",

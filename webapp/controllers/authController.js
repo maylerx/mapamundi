@@ -7,26 +7,27 @@ const { promisify } = require('util')
 exports.register = async (req, res) => {
     try {
         const name = req.body.name
+        const email = req.body.email
         const user = req.body.user
         const pass = req.body.pass
         let passHash = await bcryptjs.hash(pass, 8)
-        if (!user || !name || !pass) {
+        if (!name || !email || !user || !pass) {
             res.render('pages/register', {
                 alert: true,
                 alertTitle: "Advertencia",
-                alertMessage: "Ingrese su nombre de usuario, nombre completo y contraseña",
+                alertMessage: "Ingrese su nombre completo, email, nombre de usuario y contraseña",
                 alertIcon: 'info',
                 showConfirmButton: true,
                 timer: false,
                 ruta: 'register'
             })
         } else {
-            conexion.query('INSERT INTO users SET ?', { user: user, name: name, pass: passHash }, async (error, results) => {
+            conexion.query('INSERT INTO users SET ?', { name: name, email: email, user: user, pass: passHash }, async (error, results) => {
                 if (error) {
                     if(error.sqlMessage.includes("Duplicate entry")){
-                        mensaje = "El nombre de usuario ya está en uso";
+                        mensaje = "El nombre de usuario o email ya está en uso";
                     }else{
-                        mensaje = "Ha ocurrido un error inesperado";
+                        mensaje = "Ha ocurrido un error inesperado: " + error.sqlMessage + " ";
                     }
                     res.render('pages/register', {
                         alert: true,
@@ -41,7 +42,7 @@ exports.register = async (req, res) => {
                     res.render('pages/register', {
                         alert: true,
                         alertTitle: "Registro exitoso",
-                        alertMessage: "¡REGISTRO CORRECTO!",
+                        alertMessage: "Te has registrado correctamente. ¡Inicia sesión!",
                         alertIcon: 'success',
                         showConfirmButton: false,
                         timer: 1500,
@@ -65,7 +66,7 @@ exports.login = async (req, res) => {
             res.render('pages/login', {
                 alert: true,
                 alertTitle: "Advertencia",
-                alertMessage: "Ingrese un usuario y constraseña",
+                alertMessage: "Ingrese su nombre de usuario y contraseña",
                 alertIcon: 'info',
                 showConfirmButton: true,
                 timer: false,
@@ -138,4 +139,19 @@ exports.isAuthenticated = async (req, res, next) => {
 exports.logout = (req, res) => {
     res.clearCookie('jwt')
     return res.redirect('/')
+}
+
+exports.existeEgresadoRegistrado = (req, res) => {
+    const email = req.body.email
+    conexion.query('SELECT * FROM egresados WHERE email = ?', [email], (error, results) => {
+        if (error) {
+            console.log(error)
+        } else {
+            if (results.length > 0) {
+                res.json({ existe: true })
+            } else {
+                res.json({ existe: false })
+            }
+        }
+    })
 }

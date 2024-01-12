@@ -4,43 +4,63 @@
     </div>
     <div class="card-body">
         <form id="formNuevoEgresado" action="/agregarEgresado" method="POST" enctype="multipart/form-data">
+            <label class="form-label">Los campos con asterisco (*) son obligatorios</label>
             <div class="mb-3">
-                <label for="nombres" class="form-label">Nombres</label>
-                <input id="nombres" name="nombres" type="text" class="form-control">
+                <label for="nombres" class="form-label">Nombres *</label>
+                <input id="nombres" name="nombres" type="text" class="form-control" maxlength="40">
             </div>
             <div class="mb-3">
-                <label for="apellidos" class="form-label">Apellidos</label>
-                <input id="apellidos" name="apellidos" type="text" class="form-control">
+                <label for="apellidos" class="form-label">Apellidos *</label>
+                <input id="apellidos" name="apellidos" type="text" class="form-control" maxlength="80">
+            </div>
+            <label for="direccion" class="form-label"><strong>Dirección *</strong></label>
+            <div class="mb-3">
+                <label for="calle_carrera" class="form-label">Carre o Carrera *</label>
+                <input id="calle_carrera" name="calle_carrera" type="text" class="form-control" maxlength="100">
             </div>
             <div class="mb-3">
-                <label for="direccion" class="form-label">Dirección</label>
-                <input id="direccion" name="direccion" type="text" class="form-control">
+                <label for="numero_casa" class="form-label">Número de Casa o Apartamento*</label>
+                <input id="numero_casa" name="numero_casa" type="text" class="form-control" maxlength="100">
             </div>
             <div class="mb-3">
-                <label for="pais">País</label>
-                <select class="form-control" id="pais" name="pais"></select>
+                <label for="numero_torre" class="form-label">Número de Torre</label>
+                <input id="numero_torre" name="numero_torre" type="text" class="form-control" maxlength="100">
             </div>
             <div class="mb-3">
-                <label for="departamento">Departamento</label>
-                <select class="form-control" id="departamento" name="departamento"></select>
+                <label for="barrio_vereda" class="form-label">Barrio o Vereda *</label>
+                <input id="barrio_vereda" name="barrio_vereda" type="text" class="form-control" maxlength="100">
             </div>
             <div class="mb-3">
-                <label for="ciudad">Ciudad</label>
-                <select class="form-control" id="ciudad" name="ciudad"></select>
+                <label for="codigo_postal" class="form-label">Código Postal *</label>
+                <input id="codigo_postal" name="codigo_postal" type="number" maxlength="10" class="form-control">
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label">Correo Electrónico</label>
-                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+                <label for="detalles_direccion" class="form-label">Detalles Adicionales de tu Dirección</label>
+                <textarea class="form-control" id="detalles_direccion" name="detalles_direccion" type="text" aria-label="With textarea" maxlength="250"></textarea>
             </div>
             <div class="mb-3">
-                <label for="year">Año</label>
-                <select class="form-control" id="year" name="year">
-                    <!-- Script JavaScript llenará las opciones automáticamente -->
-                </select>
+                <label for="pais_residencia">País de Residencia *</label>
+                <select class="form-control" id="pais_residencia" name="pais_residencia"></select>
             </div>
             <div class="mb-3">
-                <label for="carrera_cursada">Carrera Cursada</label>
-                <select class="form-control" id="carrera_cursada" name="carrera_cursada">
+                <label for="departamento_residencia">Departamento de Residencia *</label>
+                <select class="form-control" id="departamento_residencia" name="departamento_residencia"></select>
+            </div>
+            <div class="mb-3">
+                <label for="ciudad_residencia">Ciudad de Residencia *</label>
+                <select class="form-control" id="ciudad_residencia" name="ciudad_residencia"></select>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo Electrónico *</label>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" maxlength="100">
+            </div>
+            <div class="mb-3">
+                <label for="numero_telefono" class="form-label">Número de Teléfono *</label>
+                <input type="number" class="form-control" id="numero_telefono" name="numero_telefono" maxlength="50" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+            </div>
+            <div class="mb-3">
+                <label for="year_graduacion">Año de Graduación *</label>
+                <select class="form-control" id="year_graduacion" name="year_graduacion">
                     <!-- Script JavaScript llenará las opciones automáticamente -->
                 </select>
             </div>
@@ -49,20 +69,24 @@
                 <input id="imagen" name="imagen" type="file" class="form-control">
             </div>
             <div class="mb-3">
-                <label for="coord_x" class="form-label">Coordenada X</label>
-                <input id="coord_x" name="coord_x" type="text" class="form-control">
+                <label for="coordenadas" class="form-label">Coordenadas *</label>
+                <input id="coordenadas" name="coordenadas" type="text" class="form-control">
             </div>
             <div class="mb-3">
-                <label for="coord_y" class="form-label">Coordenada Y</label>
-                <input id="coord_y" name="coord_y" type="text" class="form-control">
+                <label for="portafolio_url" class="form-label">URL de Portafolio | Página Web Personal </label>
+                <input id="portafolio_url" name="portafolio_url" type="text" class="form-control" maxlength="250">
             </div>
             <div class="mb-3">
-                <label for="portafolio_url" class="form-label">URL de Portafolio | Página Web</label>
-                <input id="portafolio_url" name="portafolio_url" type="text" class="form-control">
+                <label for="cargo_actual" class="form-label">Cargo Actual </label>
+                <input id="cargo_actual" name="cargo_actual" type="text" class="form-control" maxlength="100">
+            </div>
+            <div class="mb-3">
+                <label for="empresa_url" class="form-label">URL de tu Empresa Actual </label>
+                <input id="empresa_url" name="empresa_url" type="text" class="form-control" maxlength="250">
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="datos_publicos" name="datos_publicos">
-                <label class="form-check-label" for="datos_publicos">
+                <input class="form-check-input" type="checkbox" value="" id="datos_publicos" name="datos_publicos" checked>
+                <label class="form-check-label" for="datos_publicos" style="margin-bottom: 20px;">
                     ¿Desea que sus datos sean públicos?
                 </label>
             </div>

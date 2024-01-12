@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary').v2
+const fs = require('fs');
 
 // Servicio Cloudinary
 cloudinary.config({
@@ -13,6 +14,7 @@ async function uploadImage(filePath){
             console.log(error);
         } else {
             console.log(result);
+            fs.unlinkSync(filePath);
         }
     });
 }

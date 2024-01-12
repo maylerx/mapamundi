@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Aplicación de egresados | Registro</title>
+    <title>Aplicación de graduados | Registro</title>
     <!-- Bootstrap CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
@@ -19,15 +19,19 @@
             <div class="card-body">
               <form id="formRegister" action="/register" method="POST">        
                 <div class="mb-3">
-                    <label for="name" class="form-label">Nombre completo</label>
-                    <input id="name" name="name" type="text" class="form-control" aria-describedby="emailHelp">              
+                    <label for="name" class="form-label">Nombre completo *</label>
+                    <input id="name" name="name" type="text" class="form-control">              
                 </div>
                 <div class="mb-3">
-                    <label for="user" class="form-label">Nombre de usuario</label>
+                  <label for="email" class="form-label">Email *</label>
+                  <input id="email" name="email" type="text" class="form-control" aria-describedby="emailHelp">              
+              </div>
+                <div class="mb-3">
+                    <label for="user" class="form-label">Nombre de usuario *</label>
                     <input id="user" name="user" type="text" class="form-control">
                 </div>
                 <div class="mb-3">
-                    <label for="pass" class="form-label">Contraseña</label>
+                    <label for="pass" class="form-label">Contraseña *</label>
                     <input id="pass" name="pass" type="password" class="form-control">
                 </div>                            
             </div>

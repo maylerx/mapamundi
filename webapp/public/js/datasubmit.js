@@ -1,3 +1,4 @@
+// Objetivo: enviar datos al servidor mediante AJAX
 $(document).ready(function () {
     $('#formNuevoEgresado').submit(function (event) {
         event.preventDefault(); // Evita que se envíe el formulario de forma tradicional
@@ -19,91 +20,33 @@ $(document).ready(function () {
                         showConfirmButton: data.showConfirmButton,
                         timer: data.timer
                     }).then(() => {
-                        window.location = '/' + data.ruta;
+                        if (data.ruta != '') {
+                            window.location = '/' + data.ruta;
+                        } 
                     });
                 }
             },
             error: function (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: error,
+                });
                 console.log(error);
             }
         });
     });
 });
 
+// Objetivo: llenar los selectores de año de graduación y de país
 $(document).ready(function () {
     var anioActual = new Date().getFullYear();
     for (var i = anioActual; i >= 1962; i--) {
-        $('#year').append('<option value="' + i + '">' + i + '</option>');
+        $('#year_graduacion').append('<option value="' + i + '">' + i + '</option>');
     }
 });
 
-$(document).ready(function () {
-    const programas = [
-        "Administración de Negocios a Distancia",
-        "Administración de Negocios Presencial",
-        "Administración Financiera a Distancia",
-        "Artes Visuales",
-        "Biología",
-        "Ciencia de la Información y la Documentación, Bibliotecología y Archivística",
-        "Comunicación Social - Periodismo",
-        "Concurso Atención de Triage para Profesionales de la Salud",
-        "Contaduría Pública",
-        "Curso Especializado en Artes Plásticas",
-        "Curso Especializado en Inglés para niños",
-        "Curso Especializado en Música",
-        "Curso Especializado en Teatro",
-        "Curso Preuniversitario",
-        "Diplomado en Docencia Universitaria",
-        "Diplomado en Plantas Medicinales",
-        "Diplomado en Prevención, Preparación y Respuesta a Emergencias Empresariales - PPREE",
-        "Diplomado Gestión del Desarrollo Territorial",
-        "Diplomado Vivencial en Pedagogía Emocional Comunitaria",
-        "Doctorado en Ciencias",
-        "Doctorado en Ciencias de la Educación",
-        "Economía",
-        "Enfermería",
-        "Especialización en Administración Hospitalaria en Convenio con la Ean",
-        "Especialización en Contabilidad Financiera Internacional",
-        "Especialización en Gerencia Estratégica de la Auditoría Interna",
-        "Especialización en Gerencia Tributaria Internacional",
-        "Especialización en Pediatría",
-        "Filosofía",
-        "Física",
-        "Gerontología",
-        "Ingeniería Civil",
-        "Ingeniería de Alimentos",
-        "Ingeniería de Sistemas y Computación",
-        "Ingeniería Electrónica",
-        "Ingeniería Topográfica y Geomática",
-        "Licenciatura en Ciencias Naturales y Educación Ambiental",
-        "Licenciatura en Ciencias Sociales",
-        "Licenciatura en Educación Física, Recreación y Deportes",
-        "Licenciatura en Educación Infantil",
-        "Licenciatura en Lenguas Modernas con énfasis en Inglés y Francés",
-        "Licenciatura en Literatura y Lengua Castellana",
-        "Licenciatura en Matemáticas",
-        "Maestría en Administración",
-        "Maestría en Agronegocios del Café",
-        "Maestría en Auditoría y Control de Gestión",
-        "Maestría en Biomatemáticas",
-        "Maestría en Ciencias Biomédicas",
-        "Maestría en Ciencias de la Educación",
-        "Maestría en Gestión de Riesgo de Desastres",
-        "Maestría en Ingeniería",
-        "Maestría en Procesos Agroindustriales",
-        "Medicina",
-        "Química",
-        "Seguridad y Salud en el Trabajo",
-        "Tecnología en Instrumentación Electrónica",
-        "Tecnología En Obras Civiles",
-        "Trabajo Social",
-        "Zootecnia"
-    ];
-    for (var i = 0; i < programas.length; i++) {
-        $('#carrera_cursada').append('<option value="' + (i+1) + '">' + programas[i] + '</option>');
-    }
-});
-
+// Objetivo: llenar los selectores de pais, departamento y ciudad
 $(document).ready(function () {
     // Función para llenar el selector de países
     function cargarPaises() {
@@ -112,7 +55,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (data) {
                 for (let i = 0; i < data.geonames.length; i++) {
-                    $('#pais').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].countryName}</option>`);
+                    $('#pais_residencia').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].countryName}</option>`);
                 }
             }
         });
@@ -120,14 +63,14 @@ $(document).ready(function () {
 
     // Función para cargar los departamentos según el país seleccionado
     function cargarDepartamentos(paisId) {
-        $('#departamento').empty();
+        $('#departamento_residencia').empty();
         $.ajax({
             url: `http://api.geonames.org/childrenJSON?geonameId=${paisId}&username=sebasbp`,
             dataType: 'json',
             success: function (data) {
                 for (let i = 0; i < data.geonames.length; i++) {
                     if (data.geonames[i].fcode === 'ADM1') {
-                        $('#departamento').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
+                        $('#departamento_residencia').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
                     }
                 }
             }
@@ -136,14 +79,14 @@ $(document).ready(function () {
 
     // Función para cargar las ciudades según el departamento seleccionado
     function cargarCiudades(deptoId) {
-        $('#ciudad').empty();
+        $('#ciudad_residencia').empty();
         $.ajax({
             url: `http://api.geonames.org/childrenJSON?geonameId=${deptoId}&username=sebasbp`,
             dataType: 'json',
             success: function (data) {
                 for (let i = 0; i < data.geonames.length; i++) {
                     if (data.geonames[i].fcode === 'ADM2') {
-                        $('#ciudad').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
+                        $('#ciudad_residencia').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
                     }
                 }
             }
@@ -154,13 +97,13 @@ $(document).ready(function () {
     cargarPaises();
 
     // Evento cuando se selecciona un país
-    $('#pais').on('change', function () {
+    $('#pais_residencia').on('change', function () {
         const paisId = $(this).val();
         cargarDepartamentos(paisId);
     });
 
     // Evento cuando se selecciona un departamento
-    $('#departamento').on('change', function () {
+    $('#departamento_residencia').on('change', function () {
         const deptoId = $(this).val();
         cargarCiudades(deptoId);
     });

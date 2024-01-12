@@ -5,11 +5,13 @@ const axios = require('axios');
 exports.datosEgresados = async (req, res) => {
     try {
         const query = `
-            SELECT e.nombres, e.apellidos, e.direccion, e.pais, e.departamento, e.ciudad,
-                e.email, e.year_graduacion, cc.nombre AS carrera_cursada,
+            SELECT e.nombres, e.apellidos,
+                e.calle_carrera, e.numero_casa, e.barrio_vereda, e.pais_residencia,
+                e.departamento_residencia, e.ciudad_residencia,
+                e.email, e.numero_telefono, e.year_graduacion,
+                e.cargo_actual, e.empresa_url,
                 e.imagen_url, e.portafolio_url, e.coord_x, e.coord_y
             FROM egresados e
-            JOIN carrera_cursada cc ON e.carrera_cursada_id = cc.id
         `;
 
         const results = await new Promise((resolve, reject) => {
@@ -57,19 +59,49 @@ function obtenerNombreUbicacionPorId(tipo, id) {
 
 exports.agregarEgresado = async (req, res) => {
     try {
-        const { nombres, apellidos, direccion, pais, departamento,
-                ciudad, email, year, carrera_cursada, portafolio_url,
-                coord_x, coord_y } = req.body;
+        const { nombres,
+                apellidos,
+                calle_carrera, 
+                numero_casa, 
+                numero_torre, 
+                barrio_vereda,
+                codigo_postal, 
+                pais_residencia, 
+                departamento_residencia,
+                detalles_direccion,
+                ciudad_residencia, 
+                email, 
+                numero_telefono, 
+                year_graduacion, 
+                coordenadas,
+                portafolio_url, 
+                cargo_actual, 
+                empresa_url } = req.body;
+
+        // BORRAR LUEGO
         console.log(req.body);
-        if (!nombres || !apellidos || !coord_x || !coord_y || !email
-            || !direccion || !pais || !departamento || !ciudad
-            || !year || !carrera_cursada || !portafolio_url
+        
+        // Verificacion de datos obligatorios
+        if (!nombres
+            || !apellidos
+            || !calle_carrera
+            || !numero_casa
+            || !barrio_vereda
+            || !codigo_postal
+            || !pais_residencia
+            || !departamento_residencia
+            || !ciudad_residencia
+            || !email
+            || !numero_telefono 
+            || !year_graduacion
+            || !coordenadas
+            || !portafolio_url 
             || req.files.imagen === null) {
-            console.log("Advertencia: Ingresar todos los campos");
+            console.log("ADVERTENCIA: NO SE INGRESARON TODOS LOS CAMPOS OBLIGATORIOS");
             res.json({
                 alert: true,
                 alertTitle: "Advertencia",
-                alertMessage: "Ingrese todos los campos",
+                alertMessage: "Ingrese todos los campos obligatorios (*)",
                 alertIcon: 'info',
                 showConfirmButton: true,
                 timer: false,
@@ -79,45 +111,55 @@ exports.agregarEgresado = async (req, res) => {
             const tempFilePath = req.files.imagen.tempFilePath;
             const result = await uploadImage(tempFilePath);
             const rutaWebImagen = result.url
-            console.log("RUTA DE LA IMAGEN: ", rutaWebImagen);
-            var pais_name = await obtenerNombreUbicacionPorId('pais', pais);
-            var departamento_name = await obtenerNombreUbicacionPorId('departamento', departamento);
-            var ciudad_name = await obtenerNombreUbicacionPorId('ciudad', ciudad);
+            var pais_name = await obtenerNombreUbicacionPorId('pais', pais_residencia);
+            var departamento_name = await obtenerNombreUbicacionPorId('departamento', departamento_residencia);
+            var ciudad_name = await obtenerNombreUbicacionPorId('ciudad', ciudad_residencia);
+            var coord_x = coordenadas.split(", ")[0];
+            var coord_y = coordenadas.split(", ")[1];
+
             conexion.query('INSERT INTO egresados SET ?', {
+                email: email,
                 nombres: nombres,
                 apellidos: apellidos,
-                direccion: direccion,
-                pais: pais_name,
-                departamento: departamento_name,
-                ciudad: ciudad_name,
-                email: email,
-                year_graduacion: year,
+                calle_carrera: calle_carrera,
+                numero_casa: numero_casa,
+                numero_torre: numero_torre,
+                barrio_vereda: barrio_vereda,
+                codigo_postal: codigo_postal,
+                detalles_direccion: detalles_direccion,
+                ciudad_residencia: ciudad_name,
+                departamento_residencia: departamento_name,
+                pais_residencia: pais_name,
+                year_graduacion: year_graduacion,
                 imagen_url: rutaWebImagen,
                 coord_x: coord_x,
                 coord_y: coord_y,
-                carrera_cursada_id: carrera_cursada,
+                numero_telefono: numero_telefono,
                 portafolio_url: portafolio_url,
-                datos_publicos: req.body.datos_publicos === "1" ? 1 : 0,
+                datos_publicos: req.body.datos_publicos === "1" ? true : false,
+                cargo_actual: cargo_actual,
+                empresa_url: empresa_url,
             }, (error) => {
                 if (error) {
                     res.json({
                         alert: true,
                         alertTitle: "Error",
-                        alertMessage: "Ha ocurrido un error al agregar el egresado",
+                        alertMessage: error.message,
                         alertIcon: 'error',
                         showConfirmButton: true,
                         timer: false,
                         ruta: ''
                     });
                 } else {
+                    console.log("SE HA REGISTRADO UN GRADUADO NUEVO");
                     res.json({
                         alert: true,
                         alertTitle: "Proceso exitoso",
-                        alertMessage: "El egresado se ha agregado correctamente",
+                        alertMessage: "Los datos del graduado se han registrado correctamente",
                         alertIcon: 'success',
                         showConfirmButton: false,
                         timer: 800,
-                        ruta: ''
+                        ruta: '/'
                     });
                 }
             });
@@ -137,7 +179,7 @@ exports.agregarEgresado = async (req, res) => {
             res.json({
                 alert: true,
                 alertTitle: "Error",
-                alertMessage: "Ha ocurrido un error inesperado",
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: false,

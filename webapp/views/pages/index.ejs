@@ -6,6 +6,7 @@
 </head>
 
 <body>
+
   <!-- Sidebar de opciones  -->
   <div class="wrapper d-flex align-items-stretch">
     <nav id="sidebar" class="active">
@@ -16,7 +17,7 @@
         </button>
       </div>
       <div class="p-4">
-        <h3><a href="" class="logo">Aplicación Web de Egresados</a></h3>
+        <h3><a href="" class="logo">Aplicación Web de Graduados UQ</a></h3>
         <ul class="list-unstyled components mb-5">
           <li class="active">
             <a href="#"><span class="fa fa-home mr-3"></span> Inicio</a>
@@ -24,13 +25,18 @@
           <!-- Visualizacion de opción agregar egresados solo para ADMIN-->
           <% if (user.rol_id===1){%>
             <li>
-              <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="margin-bottom: 20px;">
-                Agregar egresado
+              <a type="button" id="new_egresado_button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="margin-bottom: 20px;">
+                Agregar graduado
               </a>
             </li>
             <li>
-              <a href="#" id="exportar-btn" class="btn btn-primary">
-                Exportar Datos a CSV
+              <a href="#" id="exportar-btn" class="btn btn-primary" style="margin-bottom: 20px;">
+                Exportar Datos a Excel
+              </a>
+            </li>
+            <li>
+              <a type="button" id="importar-btn" class="btn btn-primary" style="margin-bottom: 20px;">
+                Importar Datos Excel
               </a>
             </li>
             <% } %>
@@ -70,7 +76,7 @@
             </div>
             <% if (user.rol_id===1) { %> 
               <div class="col">
-                <h3>Búsqueda de egresados: </h3>
+                <h3>Búsqueda de graduados: </h3>
                 <input id="egresado_buscar" name="egresado_buscar" type="text" class="form-control"
                   placeholder="Ingresa el nombre completo del egresado">
               </div>
@@ -80,7 +86,7 @@
       </div>
 
       <!-- Contenido Principal -->
-      <% if (user.rol_id===1) { form_tittle = 'Agregar un egresado'; %>
+      <% if (user.rol_id===1) { form_tittle = 'Agregar un graduado'; %>
         <!-- Renderizar el Mapa -->
         <div id="map"></div>
         <!-- Renderizar el formulario como un modal -->
@@ -90,7 +96,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Egresado</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Graduado</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -99,16 +105,18 @@
             </div>
           </div>
         </div>
-      <% } else if (user.rol_id===2) { form_tittle = 'Agregar mis datos';%>
-      <!-- Renderizar el formulario como un contenedor -->
-        <%- include ('../partials/egresadoform.ejs') %>
+      <% } else if (user.rol_id===2) { %>
+          <% form_tittle = 'Agregar mis datos'; %>
+          <!-- Renderizar el formulario como un contenedor -->
+          <%- include ('../partials/egresadoform.ejs') %>
       <% } %>
-      
     </div>
   </div>
 
   <%- include ('../partials/scriptsimports.ejs') %>
 
+  <!-- NO TOCAR ESTO AUNQUE MARQUE ERROR DEL EDITOR YA QUE EL SWEET ALERT SE USA CON
+  EL EJS INTERPOLANDO LAS RESPUESTAS DE EVENTOS -->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <% if(alert) { %>
     <script>
@@ -119,7 +127,9 @@
         showConfirmButton: <%= showConfirmButton %>,
         timer: <%= timer %>
       }).then(() => {
-        window.location = '/<%= ruta %>'
+        if (ruta != '') {
+          window.location = '/<%= ruta %>'
+        } 
       })
     </script>
   <% } %>

@@ -1,0 +1,16 @@
+1) añadir al formulario CARGO que desempeña en la empresa | IN PROGRESS
+2) link de la empresa donde trabaja | IN PROGRESS
+3) El CRUD crear, incertar, actualizar eliminar un egresado y que la llave primaria
+ sea el correo electronico | IN PROGRESS
+4) que aparte de exporta a execl tambien se pueda importar de un exec | IN PROGRESS
+5) que el buscador de egresador tambien se peuda buscar por otros parametros como areas | ????
+6) cambiar pais por el nombre pais de recidencia, departamento por departamento de
+rcidencia, año por año de graduacion y agregar numero de telefono | IN PROGRESS
+7) Cambiar lo de que pueda seleccionar las carreras y dejar solo la de ingenieria de
+ sistemas ya que solo es el primagra de nosotros | OK
+8) cambiar el nombre del formularo por graduados y no egresados | OK
+9) que la direccion se pueda ingresar por campos, osea por cajas de texto separadas,
+ por ejemplo calle , carrera etc y colocar otro campo que sea datos adicionales de la
+  direcion por si la persona es de otro pais y necesita ingresar otra denominacion rara | IN PROGRESS
+10) que en el marcador que aparece en el mapa no tenga que darle click para ver la
+ informacion del egrasdo sino que con solo pasar el mouse por ensima lo muestre | IN PROGRESS

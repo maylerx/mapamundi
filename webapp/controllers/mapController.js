@@ -1,6 +1,7 @@
 const conexion = require('../database/db')
 const uploadImage = require('./cloudinaryController');
 const axios = require('axios');
+const fs = require('fs');
 
 exports.datosEgresados = async (req, res) => {
     try {
@@ -108,9 +109,20 @@ exports.agregarEgresado = async (req, res) => {
                 ruta: ''
             });
         } else {
+            // Subir imagen a Cloudinary
             const tempFilePath = req.files.imagen.tempFilePath;
             const result = await uploadImage(tempFilePath);
             const rutaWebImagen = result.url
+
+            // Eliminamos el archivo temporal
+            fs.unlinkSync(tempFilePath, (err) => {
+                if (err) {
+                    console.log("No se pudo eliminar el archivo temporal");
+                } else {
+                    console.log("Se eliminó el archivo temporal");
+                }
+            });
+
             var pais_name = await obtenerNombreUbicacionPorId('pais', pais_residencia);
             var departamento_name = await obtenerNombreUbicacionPorId('departamento', departamento_residencia);
             var ciudad_name = await obtenerNombreUbicacionPorId('ciudad', ciudad_residencia);

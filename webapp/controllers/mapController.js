@@ -115,13 +115,14 @@ exports.agregarEgresado = async (req, res) => {
             const rutaWebImagen = result.url
 
             // Eliminamos el archivo temporal
-            fs.unlinkSync(tempFilePath, (err) => {
-                if (err) {
-                    console.log("No se pudo eliminar el archivo temporal");
-                } else {
-                    console.log("Se eliminó el archivo temporal");
-                }
-            });
+            const filePath = 'uploads/' + result.original_filename;
+
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+                console.log("Se eliminó el archivo temporal");
+            } else {
+                console.log("El archivo temporal no existe");
+            }
 
             var pais_name = await obtenerNombreUbicacionPorId('pais', pais_residencia);
             var departamento_name = await obtenerNombreUbicacionPorId('departamento', departamento_residencia);
@@ -155,7 +156,7 @@ exports.agregarEgresado = async (req, res) => {
                 if (error) {
                     res.json({
                         alert: true,
-                        alertTitle: "Error",
+                        alertTitle: "Error de Base de Datos",
                         alertMessage: error.message,
                         alertIcon: 'error',
                         showConfirmButton: true,
@@ -171,7 +172,7 @@ exports.agregarEgresado = async (req, res) => {
                         alertIcon: 'success',
                         showConfirmButton: false,
                         timer: 800,
-                        ruta: '/'
+                        ruta: '#'
                     });
                 }
             });
@@ -187,10 +188,22 @@ exports.agregarEgresado = async (req, res) => {
                 timer: false,
                 ruta: ''
             });
-        }else{
+        }
+        if (error.message.startsWith("Duplicate entry")){
             res.json({
                 alert: true,
-                alertTitle: "Error",
+                alertTitle: "Advertencia",
+                alertMessage: "Ya hay un graduado registrado con el correo electrónico o número de telefono ingresados",
+                alertIcon: 'info',
+                showConfirmButton: true,
+                timer: false,
+                ruta: ''
+            });
+        }else{
+            console.log(error);
+            res.json({
+                alert: true,
+                alertTitle: "Error en Servidor",
                 alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,

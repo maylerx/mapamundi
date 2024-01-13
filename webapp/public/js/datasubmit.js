@@ -21,7 +21,7 @@ $(document).ready(function () {
                         timer: data.timer
                     }).then(() => {
                         if (data.ruta != '') {
-                            window.location = '/' + data.ruta;
+                            location.reload();
                         } 
                     });
                 }

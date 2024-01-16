@@ -10,9 +10,7 @@ rcidencia, año por año de graduacion y agregar numero de telefono | OK
   direcion por si la persona es de otro pais y necesita ingresar otra denominacion rara | OK
 10) que en el marcador que aparece en el mapa no tenga que darle click para ver la
  informacion del egrasdo sino que con solo pasar el mouse por ensima lo muestre | OK
-
-
-4) que aparte de exporta a execl tambien se pueda importar de un exec | IN PROGRESS (EXPORT: OK, IMPORT: IN PROGRESS)
+4) que aparte de exporta a execl tambien se pueda importar de un exec | OK
 
 
 3) El CRUD crear, incertar, actualizar eliminar un egresado y que la llave primaria

@@ -54,9 +54,13 @@ $(document).ready(function () {
             url: `http://api.geonames.org/countryInfoJSON?username=sebasbp`,
             dataType: 'json',
             success: function (data) {
+                console.log("Cargando paises: ", data);
                 for (let i = 0; i < data.geonames.length; i++) {
                     $('#pais_residencia').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].countryName}</option>`);
                 }
+            },
+            error: function (error) {
+                console.log("Error cargando paises: ", error);
             }
         });
     }

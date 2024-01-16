@@ -24,9 +24,9 @@ exports.register = async (req, res) => {
         } else {
             conexion.query('INSERT INTO users SET ?', { name: name, email: email, user: user, pass: passHash }, async (error, results) => {
                 if (error) {
-                    if(error.sqlMessage.includes("Duplicate entry")){
+                    if (error.sqlMessage.includes("Duplicate entry")) {
                         mensaje = "El nombre de usuario o email ya está en uso";
-                    }else{
+                    } else {
                         mensaje = "Ha ocurrido un error inesperado: " + error.sqlMessage + " ";
                     }
                     res.render('pages/register', {
@@ -43,9 +43,7 @@ exports.register = async (req, res) => {
                         alert: true,
                         alertTitle: "Registro exitoso",
                         alertMessage: "Te has registrado correctamente. ¡Inicia sesión!",
-                        alertIcon: 'success',
                         showConfirmButton: false,
-                        timer: 1500,
                         ruta: ''
                     });
                 }
@@ -88,7 +86,7 @@ exports.login = async (req, res) => {
                 } else {
                     // Inicio de sesión OK
                     const id = results[0].id
-                    const token = jwt.sign({ id: id}, process.env.JWT_SECRETO, {
+                    const token = jwt.sign({ id: id }, process.env.JWT_SECRETO, {
                         expiresIn: process.env.JWT_TIEMPO_EXPIRA
                     })
 

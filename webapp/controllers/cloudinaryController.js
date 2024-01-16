@@ -13,7 +13,7 @@ async function uploadImage(filePath){
         if (error) {
             console.log(error);
         } else {
-            console.log(result);
+            // Borra el archiv temporal
             fs.unlinkSync(filePath);
         }
     });

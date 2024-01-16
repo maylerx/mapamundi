@@ -75,12 +75,10 @@ exports.agregarEgresado = async (req, res) => {
                 numero_telefono, 
                 year_graduacion, 
                 coordenadas,
-                portafolio_url, 
+                portafolio_url,
+                datos_publicos, 
                 cargo_actual, 
                 empresa_url } = req.body;
-
-        // BORRAR LUEGO
-        console.log(req.body);
         
         // Verificacion de datos obligatorios
         if (!nombres
@@ -112,17 +110,7 @@ exports.agregarEgresado = async (req, res) => {
             // Subir imagen a Cloudinary
             const tempFilePath = req.files.imagen.tempFilePath;
             const result = await uploadImage(tempFilePath);
-            const rutaWebImagen = result.url
-
-            // Eliminamos el archivo temporal
-            const filePath = 'uploads/' + result.original_filename;
-
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-                console.log("Se eliminó el archivo temporal");
-            } else {
-                console.log("El archivo temporal no existe");
-            }
+            const rutaWebImagen = result.url;
 
             var pais_name = await obtenerNombreUbicacionPorId('pais', pais_residencia);
             var departamento_name = await obtenerNombreUbicacionPorId('departamento', departamento_residencia);
@@ -149,20 +137,33 @@ exports.agregarEgresado = async (req, res) => {
                 coord_y: coord_y,
                 numero_telefono: numero_telefono,
                 portafolio_url: portafolio_url,
-                datos_publicos: req.body.datos_publicos === "1" ? true : false,
+                datos_publicos: datos_publicos === 'on' ? 1 : 0,
                 cargo_actual: cargo_actual,
                 empresa_url: empresa_url,
             }, (error) => {
                 if (error) {
-                    res.json({
-                        alert: true,
-                        alertTitle: "Error de Base de Datos",
-                        alertMessage: error.message,
-                        alertIcon: 'error',
-                        showConfirmButton: true,
-                        timer: false,
-                        ruta: ''
-                    });
+                    if (error.code === 'ER_DUP_ENTRY'){
+                        res.json({
+                            alert: true,
+                            alertTitle: "Advertencia",
+                            alertMessage: "Ya hay un graduado registrado con el correo electrónico o número de telefono ingresados",
+                            alertIcon: 'info',
+                            showConfirmButton: true,
+                            timer: false,
+                            ruta: ''
+                        });
+                    }else{
+                        console.log(error);
+                        res.json({
+                            alert: true,
+                            alertTitle: "Error en la base de datos",
+                            alertMessage: error.message,
+                            alertIcon: 'error',
+                            showConfirmButton: true,
+                            timer: false,
+                            ruta: ''
+                        });
+                    }
                 } else {
                     console.log("SE HA REGISTRADO UN GRADUADO NUEVO");
                     res.json({
@@ -178,6 +179,7 @@ exports.agregarEgresado = async (req, res) => {
             });
         }
     } catch (error) {
+        console.error('Error al insertar los datos en el servidor:', error);
         if (error.message == "Cannot read properties of null (reading 'imagen')"){
             res.json({
                 alert: true,
@@ -188,22 +190,10 @@ exports.agregarEgresado = async (req, res) => {
                 timer: false,
                 ruta: ''
             });
-        }
-        if (error.message.startsWith("Duplicate entry")){
+        } else {
             res.json({
                 alert: true,
-                alertTitle: "Advertencia",
-                alertMessage: "Ya hay un graduado registrado con el correo electrónico o número de telefono ingresados",
-                alertIcon: 'info',
-                showConfirmButton: true,
-                timer: false,
-                ruta: ''
-            });
-        }else{
-            console.log(error);
-            res.json({
-                alert: true,
-                alertTitle: "Error en Servidor",
+                alertTitle: "Error en la base de datos",
                 alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,

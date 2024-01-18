@@ -1,32 +1,51 @@
-const pinesEgresados = async () => {
+// Variable para almacenar los datos obtenidos
+let cachedEgresadosData = null;
+
+// Función para obtener todos los datos de los egresados de la base de datos
+const obtenerDatosEgresados = async () => {
+
+    // Verificar si ya existen datos en la caché
+    if (cachedEgresadosData !== null) {
+        console.log("Obteniendo datos de la caché:", cachedEgresadosData);
+        return cachedEgresadosData;
+    }
+
     try {
         const response = await fetch('/datosEgresados')
         const data = await response.json()
         console.log("Datos de egresados: ", data)
+
+        // Almacenar los datos en la variable de caché
+        cachedEgresadosData = data;
+
         return data
     } catch (error) {
         console.log("Error en implementación de obtener datos en map.js" + error)
     }
 }
 
+// Definición de la vista del mapa
 var map = L.map('map').setView([4.547597653099881, -75.66383667974051], 13);
 
+// Atribución del mapa a los creadores
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+// Declaración de los marcadores para su uso y gestion posterior
 const marcadores = [];
 
 // recorrer los pinesEgresados y agregarlos al mapa poniendo de descripción el nombre y apellidos	
-pinesEgresados().then((egresados) => {
+obtenerDatosEgresados().then((egresados) => {
     try {
         egresados.forEach((egresado) => {
-            var info = '<h4><strong>Nombre: </strong>' + egresado.nombres + ' ' + egresado.apellidos + '</h4>' +
+            var info = 
+            '<h4><strong>Nombre: </strong>' + egresado.nombres + ' ' + egresado.apellidos + '</h4>' +
             '<br><h6><strong>Direccion: </strong>'+ egresado.calle_carrera + ' ' + egresado.numero_casa + ' ' + egresado.barrio_vereda +
             '<br><strong>País de Residencia: </strong>'+ egresado.pais_residencia +
             '<br><strong>Departamento de Residencia: </strong>'+ egresado.departamento_residencia +
             '<br><strong>Ciudad de Residencia: </strong>'+ egresado.ciudad_residencia +
-            '<br><strong>Email: </strong>'+ egresado.email +
+            '<br><strong>Email: </strong><span id="email_popup">'+ egresado.email + '</span>' +
             '<br><strong>Número de Teléfono: </strong>' + egresado.numero_telefono +
             '<br><strong>Año de Graduación: </strong>'+ egresado.year_graduacion +
             '<br><strong>Carrera Cursada: </strong> ingeniería de Sistemas y Computación' +
@@ -38,8 +57,15 @@ pinesEgresados().then((egresados) => {
             '" alt="La foto de usuario no está disponible" '+
             'style= "widht: 100px; height: 100px;"></div></h6>';
 
+            var botones = 
+            '<br><br>'+
+            '<div style="text-align: center; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">'+
+                '<button type="button" id="botonEditarEgresado" class="btn btn-primary" data-toggle="modal" data-target="#modalEditarEgresado">Editar</button>'+
+                '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-target="#modalEliminarEgresado" onclick="eliminarEgresado(' + egresado.email + ')">Eliminar</button>'+
+            '</div>';
+
             var popup = L.popup()
-            .setContent(info);
+            .setContent(info+botones);
 
             const marker = L.marker([egresado.coord_x, egresado.coord_y]).addTo(map)
                 .bindPopup(popup);
@@ -59,12 +85,13 @@ pinesEgresados().then((egresados) => {
 document.getElementById('egresado_buscar').addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
         event.preventDefault(); // Previene el comportamiento por defecto del Enter en un formulario
-        buscarEgresado(this.value);
+        buscarEgresadoMapa(this.value);
     }
 });
 
-function buscarEgresado(nombreCompleto) {
-    pinesEgresados().then((egresados) => {
+// Para la busqueda de egresados en el mapa dado su nombre completo
+function buscarEgresadoMapa(nombreCompleto) {
+    obtenerDatosEgresados().then((egresados) => {
         var encontrado = false;
         egresados.forEach((egresado) => {
             if ((egresado.nombres + ' ' + egresado.apellidos).toLowerCase().replace(/\s/g, '') === nombreCompleto.toLowerCase().replace(/\s/g, '')) {
@@ -89,7 +116,7 @@ function buscarEgresado(nombreCompleto) {
         if (encontrado == false) {
             Swal.fire({
                 title: "Oops!",
-                text: "No se encontró el graduado buscado con el nombre ingresado",
+                text: "No se encontró el graduado buscado con los datos ingresados.",
                 icon: "error"
             });
         }

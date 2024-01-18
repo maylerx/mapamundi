@@ -3,64 +3,65 @@
         <h1 class="card-title fs-5"><%= form_tittle %></h1>
     </div>
     <div class="card-body">
-        <form id="formNuevoEgresado" action="/agregarEgresado" method="POST" enctype="multipart/form-data">
+        <form id="<%= form_id %>" action="<%= submit_action %>" method="POST" enctype="multipart/form-data">
+    
             <label class="form-label">Los campos con asterisco (*) son obligatorios</label>
             <div class="mb-3">
-                <label for="nombres" class="form-label">Nombres *</label>
-                <input id="nombres" name="nombres" type="text" class="form-control" maxlength="40">
+                <label for="nombres<%= modify_id %>" class="form-label">Nombres *</label>
+                <input id="nombres<%= modify_id %>" name="nombres" type="text" class="form-control" maxlength="40">
             </div>
             <div class="mb-3">
-                <label for="apellidos" class="form-label">Apellidos *</label>
-                <input id="apellidos" name="apellidos" type="text" class="form-control" maxlength="80">
+                <label for="apellidos<%= modify_id %>" class="form-label">Apellidos *</label>
+                <input id="apellidos<%= modify_id %>" name="apellidos" type="text" class="form-control" maxlength="80">
             </div>
             <label for="direccion" class="form-label"><strong>Dirección *</strong></label>
             <div class="mb-3">
-                <label for="calle_carrera" class="form-label">Carre o Carrera *</label>
-                <input id="calle_carrera" name="calle_carrera" type="text" class="form-control" maxlength="100">
+                <label for="calle_carrera<%= modify_id %>" class="form-label">Carre o Carrera *</label>
+                <input id="calle_carrera<%= modify_id %>" name="calle_carrera" type="text" class="form-control" maxlength="100">
             </div>
             <div class="mb-3">
-                <label for="numero_casa" class="form-label">Número de Casa o Apartamento*</label>
-                <input id="numero_casa" name="numero_casa" type="text" class="form-control" maxlength="100">
+                <label for="numero_casa<%= modify_id %>" class="form-label">Número de Casa o Apartamento*</label>
+                <input id="numero_casa<%= modify_id %>" name="numero_casa" type="text" class="form-control" maxlength="100">
             </div>
             <div class="mb-3">
-                <label for="numero_torre" class="form-label">Número de Torre</label>
-                <input id="numero_torre" name="numero_torre" type="text" class="form-control" maxlength="100">
+                <label for="numero_torre<%= modify_id %>" class="form-label">Número de Torre</label>
+                <input id="numero_torre<%= modify_id %>" name="numero_torre" type="text" class="form-control" maxlength="100">
             </div>
             <div class="mb-3">
-                <label for="barrio_vereda" class="form-label">Barrio o Vereda *</label>
-                <input id="barrio_vereda" name="barrio_vereda" type="text" class="form-control" maxlength="100">
+                <label for="barrio_vereda<%= modify_id %>" class="form-label">Barrio o Vereda *</label>
+                <input id="barrio_vereda<%= modify_id %>" name="barrio_vereda" type="text" class="form-control" maxlength="100">
             </div>
             <div class="mb-3">
-                <label for="codigo_postal" class="form-label">Código Postal *</label>
-                <input id="codigo_postal" name="codigo_postal" type="number" maxlength="10" class="form-control">
+                <label for="codigo_postal<%= modify_id %>" class="form-label">Código Postal *</label>
+                <input id="codigo_postal<%= modify_id %>" name="codigo_postal" type="number" maxlength="10" class="form-control">
             </div>
             <div class="mb-3">
-                <label for="detalles_direccion" class="form-label">Detalles Adicionales de tu Dirección</label>
-                <textarea class="form-control" id="detalles_direccion" name="detalles_direccion" type="text" aria-label="With textarea" maxlength="250"></textarea>
+                <label for="detalles_direccion<%= modify_id %>" class="form-label">Detalles Adicionales de tu Dirección</label>
+                <textarea class="form-control" id="detalles_direccion<%= modify_id %>" name="detalles_direccion" type="text" aria-label="With textarea" maxlength="250"></textarea>
             </div>
             <div class="mb-3">
-                <label for="pais_residencia">País de Residencia *</label>
-                <select class="form-control" id="pais_residencia" name="pais_residencia"></select>
+                <label for="pais_residencia<%= modify_id %>">País de Residencia *</label>
+                <select class="form-control" id="pais_residencia<%= modify_id %>" name="pais_residencia"></select>
             </div>
             <div class="mb-3">
-                <label for="departamento_residencia">Departamento de Residencia *</label>
-                <select class="form-control" id="departamento_residencia" name="departamento_residencia"></select>
+                <label for="departamento_residencia<%= modify_id %>">Departamento de Residencia *</label>
+                <select class="form-control" id="departamento_residencia<%= modify_id %>" name="departamento_residencia"></select>
             </div>
             <div class="mb-3">
-                <label for="ciudad_residencia">Ciudad de Residencia *</label>
-                <select class="form-control" id="ciudad_residencia" name="ciudad_residencia"></select>
+                <label for="ciudad_residencia<%= modify_id %>">Ciudad de Residencia *</label>
+                <select class="form-control" id="ciudad_residencia<%= modify_id %>" name="ciudad_residencia"></select>
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label">Correo Electrónico *</label>
-                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" maxlength="100">
+                <label for="email<%= modify_id %>" class="form-label">Correo Electrónico *</label>
+                <input type="email" class="form-control" id="email<%= modify_id %>" name="email" aria-describedby="emailHelp" maxlength="100">
             </div>
             <div class="mb-3">
-                <label for="numero_telefono" class="form-label">Número de Teléfono *</label>
-                <input type="number" class="form-control" id="numero_telefono" name="numero_telefono" maxlength="50" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                <label for="numero_telefono<%= modify_id %>" class="form-label">Número de Teléfono *</label>
+                <input type="number" class="form-control" id="numero_telefono<%= modify_id %>" name="numero_telefono" maxlength="50" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
             </div>
             <div class="mb-3">
-                <label for="year_graduacion">Año de Graduación *</label>
-                <select class="form-control" id="year_graduacion" name="year_graduacion">
+                <label for="year_graduacion<%= modify_id %>">Año de Graduación *</label>
+                <select class="form-control" id="year_graduacion<%= modify_id %>" name="year_graduacion">
                     <!-- Script JavaScript llenará las opciones automáticamente -->
                 </select>
             </div>
@@ -69,30 +70,30 @@
                 <input id="imagen" name="imagen" type="file" class="form-control" accept=".jpg, .jpeg, .png">
             </div>
             <div class="mb-3">
-                <label for="coordenadas" class="form-label">Coordenadas *</label>
-                <input id="coordenadas" name="coordenadas" type="text" class="form-control">
+                <label for="coordenadas<%= modify_id %>" class="form-label">Coordenadas *</label>
+                <input id="coordenadas<%= modify_id %>" name="coordenadas" type="text" class="form-control">
             </div>
             <div class="mb-3">
-                <label for="portafolio_url" class="form-label">URL de Portafolio | Página Web Personal </label>
-                <input id="portafolio_url" name="portafolio_url" type="text" class="form-control" maxlength="250">
+                <label for="portafolio_url<%= modify_id %>" class="form-label">URL de Portafolio | Página Web Personal </label>
+                <input id="portafolio_url<%= modify_id %>" name="portafolio_url" type="text" class="form-control" maxlength="250">
             </div>
             <div class="mb-3">
-                <label for="cargo_actual" class="form-label">Cargo Actual </label>
-                <input id="cargo_actual" name="cargo_actual" type="text" class="form-control" maxlength="100">
+                <label for="cargo_actual<%= modify_id %>" class="form-label">Cargo Actual </label>
+                <input id="cargo_actual<%= modify_id %>" name="cargo_actual" type="text" class="form-control" maxlength="100">
             </div>
             <div class="mb-3">
-                <label for="empresa_url" class="form-label">URL de tu Empresa Actual </label>
-                <input id="empresa_url" name="empresa_url" type="text" class="form-control" maxlength="250">
+                <label for="empresa_url<%= modify_id %>" class="form-label">URL de tu Empresa Actual </label>
+                <input id="empresa_url<%= modify_id %>" name="empresa_url" type="text" class="form-control" maxlength="250">
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="datos_publicos" name="datos_publicos" checked />
-                <label class="form-check-label" for="datos_publicos" style="margin-bottom: 20px;">
+                <input class="form-check-input" type="checkbox" value="checked" id="datos_publicos<%= modify_id %>" name="datos_publicos" />
+                <label class="form-check-label" for="datos_publicos<%= modify_id %>" style="margin-bottom: 20px;">
                     ¿Desea que sus datos sean públicos?
                 </label>
             </div>
-            <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-secondary mr-2">Cancelar</button>
-                <button type="submit" class="btn btn-success">Agregar</button>
+            <div class="modal-footer d-flex justify-content-end">
+                <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-success"><%= submit_button %></button>
             </div>
         </form>
     </div>

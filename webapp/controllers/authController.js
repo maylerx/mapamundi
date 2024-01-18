@@ -42,8 +42,10 @@ exports.register = async (req, res) => {
                     res.render('pages/register', {
                         alert: true,
                         alertTitle: "Registro exitoso",
+                        alertIcon: 'success',
                         alertMessage: "Te has registrado correctamente. ¡Inicia sesión!",
                         showConfirmButton: false,
+                        timer: 800,
                         ruta: ''
                     });
                 }

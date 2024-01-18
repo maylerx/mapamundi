@@ -1,17 +1,32 @@
 const conexion = require('../database/db')
 const uploadImage = require('./cloudinaryController');
 const axios = require('axios');
-const fs = require('fs');
 
 exports.datosEgresados = async (req, res) => {
     try {
         const query = `
-            SELECT e.nombres, e.apellidos,
-                e.calle_carrera, e.numero_casa, e.barrio_vereda, e.pais_residencia,
-                e.departamento_residencia, e.ciudad_residencia,
-                e.email, e.numero_telefono, e.year_graduacion,
-                e.cargo_actual, e.empresa_url,
-                e.imagen_url, e.portafolio_url, e.coord_x, e.coord_y
+            SELECT 
+                e.email,
+                e.nombres,
+                e.apellidos,
+                e.calle_carrera,
+                e.numero_casa,
+                e.numero_torre,
+                e.barrio_vereda,
+                e.codigo_postal,
+                e.detalles_direccion,
+                e.ciudad_residencia,
+                e.departamento_residencia,
+                e.pais_residencia,
+                e.year_graduacion,
+                e.imagen_url,
+                e.coord_x,
+                e.coord_y,
+                e.numero_telefono,
+                e.portafolio_url,
+                e.datos_publicos, 
+                e.cargo_actual,
+                e.empresa_url
             FROM egresados e
         `;
 
@@ -137,7 +152,7 @@ exports.agregarEgresado = async (req, res) => {
                 coord_y: coord_y,
                 numero_telefono: numero_telefono,
                 portafolio_url: portafolio_url,
-                datos_publicos: datos_publicos === 'on' ? 1 : 0,
+                datos_publicos: datos_publicos === 'checked' ? 1 : 0,
                 cargo_actual: cargo_actual,
                 empresa_url: empresa_url,
             }, (error) => {

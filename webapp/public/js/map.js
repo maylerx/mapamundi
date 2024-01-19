@@ -46,7 +46,7 @@ obtenerDatosEgresados().then((egresados) => {
             '<br><strong>Departamento de Residencia: </strong>'+ egresado.departamento_residencia +
             '<br><strong>Ciudad de Residencia: </strong>'+ egresado.ciudad_residencia +
             '<br><strong>Email: </strong><span id="email_popup">'+ egresado.email + '</span>' +
-            '<br><strong>Número de Teléfono: </strong>' + egresado.numero_telefono +
+            '<br><strong>Número de Teléfono: </strong><span id="numero_telefono_popup"' + egresado.numero_telefono + '</span>' +
             '<br><strong>Año de Graduación: </strong>'+ egresado.year_graduacion +
             '<br><strong>Carrera Cursada: </strong> ingeniería de Sistemas y Computación' +
             '<br><strong>Portafolio: </strong><a href="'+egresado.portafolio_url+'">'+ egresado.portafolio_url +
@@ -60,8 +60,8 @@ obtenerDatosEgresados().then((egresados) => {
             var botones = 
             '<br><br>'+
             '<div style="text-align: center; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">'+
-                '<button type="button" id="botonEditarEgresado" class="btn btn-primary" data-toggle="modal" data-target="#modalEditarEgresado">Editar</button>'+
-                '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-target="#modalEliminarEgresado" onclick="eliminarEgresado(' + egresado.email + ')">Eliminar</button>'+
+            '<button type="button" id="botonEliminarEgresado" class="btn btn-danger">Eliminar</button>'+
+            '<button type="button" id="botonEditarEgresado" class="btn btn-primary" data-toggle="modal" data-target="#modalEditarEgresado">Editar</button>'+
             '</div>';
 
             var popup = L.popup()

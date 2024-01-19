@@ -1,3 +1,6 @@
+SOLICITUDES DE CAMBIOS:
+
+--- FINALIZADAS -----
 1) añadir al formulario CARGO que desempeña en la empresa | OK
 2) link de la empresa donde trabaja | OK
 6) cambiar pais por el nombre pais de recidencia, departamento por departamento de
@@ -11,10 +14,15 @@ rcidencia, año por año de graduacion y agregar numero de telefono | OK
 10) que en el marcador que aparece en el mapa no tenga que darle click para ver la
  informacion del egrasdo sino que con solo pasar el mouse por ensima lo muestre | OK
 4) que aparte de exporta a execl tambien se pueda importar de un exec | OK
-
-
 3) El CRUD crear, incertar, actualizar eliminar un egresado y que la llave primaria
- sea el correo electronico | TODO
+ sea el correo electronico | OK
+-----------------
+
+--- POR HACER ---
+
+-----------------
 
 
+--- AMBIGUAS ---
 5) que el buscador de egresador tambien se peuda buscar por otros parametros como areas | ????
+----------------

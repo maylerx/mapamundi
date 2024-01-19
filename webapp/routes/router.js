@@ -3,6 +3,7 @@ const router = express.Router()
 
 const authController = require('../controllers/authController')
 const mapController = require('../controllers/mapController')
+const egresadoController = require('../controllers/egresadoController')
 const excelController = require('../controllers/excelController');
 const checkRoleMiddleware = require('../middlewares/checkRolMiddleware');
 
@@ -20,7 +21,9 @@ router.get('/register', (req, res)=>{
 //router para los métodos del controller
 router.post('/register', authController.register)
 router.post('/login', authController.login)
-router.post('/agregarEgresado', mapController.agregarEgresado)
+router.post('/agregarEgresado', egresadoController.agregarEgresado)
+router.put('/editarEgresado', egresadoController.editarEgresado)
+router.delete('/eliminarEgresado', egresadoController.eliminarEgresado)
 router.get('/logout', authController.logout)
 router.get('/datosEgresados', checkRoleMiddleware, mapController.datosEgresados);
 router.get('/exportarExcel', excelController.exportarExcel);

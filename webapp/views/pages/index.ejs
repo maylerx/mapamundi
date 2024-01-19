@@ -93,11 +93,11 @@
         <!-- Renderizar El Formulario como un modal -->
 
         <!-- Modal Agregar Graduado -->
-        <div class="modal fade" id="modalNuevoGraduado" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal fade" id="modalNuevoGraduado" tabindex="-1" role="dialog" aria-labelledby="modalNuevoGraduadoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Editar Graduado</h5>
+                <h5 class="modal-title" id="modalNuevoGraduadoLabel">Agregar Graduado</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -106,8 +106,8 @@
                 <% form_tittle = 'Agregar Nuevo Graduado'; %>
                 <% form_id = 'formNuevoEgresado'; %>
                 <% submit_button = 'Agregar'; %>
-                <% submit_action = '/agregarEgresado'; %>
                 <% modify_id = ''; %>
+                <% mensaje_imagen = ''; %>
                 <%- include ('../partials/egresadoform.ejs') %>
               </div>
             </div>
@@ -115,11 +115,11 @@
         </div>
 
         <!-- Modal Editar Graduado -->
-        <div class="modal fade" id="modalEditarEgresado" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal fade" id="modalEditarEgresado" tabindex="-1" role="dialog" aria-labelledby="modalEditarEgresadoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Editar Graduado</h5>
+                <h5 class="modal-title" id="modalEditarEgresadoLabel">Editar Graduado</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -128,8 +128,8 @@
                 <% form_tittle = 'Editar Datos del Graduado'; %>
                 <% form_id = 'formEditarEgresado'; %>
                 <% submit_button = 'Editar'; %>
-                <% submit_action = '/editarEgresado'; %>
                 <% modify_id = '_editar'; %>
+                <% mensaje_imagen = `(Si no deseas actualizar la imagen, deja este campo vacío)`; %>
                 <%- include ('../partials/egresadoform.ejs') %>
               </div>
             </div>
@@ -140,8 +140,8 @@
           <% form_tittle = 'Agregar mis datos'; %>
           <% form_id = 'formNuevoEgresado'; %>
           <% submit_button = 'Agregar'; %>
-          <% submit_action = "/agregarEgresado"; %>
           <% modify_id = ''; %>
+          <% mensaje_imagen = ''; %>
           <!-- Renderizar el formulario como un contenedor -->
           <%- include ('../partials/egresadoform.ejs') %>
       <% } %>

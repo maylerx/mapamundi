@@ -1,6 +1,7 @@
 const ExcelJS = require('exceljs');
 const conexion = require('../database/db');
 const fs = require('fs');
+const { enviarRespuestaSweetAlert } = require('../controllers/utils')
 
 // Controlador para la exportación de datos a Excel
 exports.exportarExcel = (req, res) => {
@@ -53,28 +54,21 @@ exports.exportarExcel = (req, res) => {
 
 // Controlador para la importacion de los datos de Excel al servidor
 exports.importarExcel = async (req, res) => {
-    
-    if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).json({ error: 'No se seleccionó ningún archivo.' });
-    }
-    
-    const archivoExcel = req.files.archivoExcel;
-    const rutaArchivoExcel = archivoExcel.tempFilePath;
-
-    if (archivoExcel.mimetype !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-        
-        // Eliminamos el archivo temporal
-        if (fs.existsSync(rutaArchivoExcel)) {
-            fs.unlinkSync(rutaArchivoExcel);
-            console.log("Se eliminó el archivo temporal");
-        } else {
-            console.log("El archivo temporal no existe");
+    try {
+        // Verificar que se haya seleccionado un archivo
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({ error: 'No se seleccionó ningún archivo.' });
         }
         
-        return res.status(400).json({ error: 'El archivo seleccionado no es un archivo Excel.' });
-    }
+        const archivoExcel = req.files.archivoExcel;
+        const rutaArchivoExcel = archivoExcel.tempFilePath;
+    
+        // Verificar que el archivo sea de tipo Excel
+        if (archivoExcel.mimetype !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+            eliminarArchivo(rutaArchivoExcel);
+            return res.status(400).json({ error: 'El archivo seleccionado no es un archivo Excel.' });
+        }
 
-    try {
         // Crear una instancia de ExcelJS y leer el archivo sin validación de tipo
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.readFile(rutaArchivoExcel);
@@ -119,35 +113,23 @@ exports.importarExcel = async (req, res) => {
             });
         }
 
-        // Enviamos la respuesta al cliente
-        res.json({
-            alert: true,
-            alertTitle: "Proceso exitoso",
-            alertMessage: "Archivo Excel importado correctamente.",
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 1000,
-            ruta: '#'
-        });
+        enviarRespuestaSweetAlert(res, "Proceso exitoso", "Archivo Excel importado correctamente.", 'success', false, 1000, '#');
 
     } catch (error) {
         console.error('Error al leer el archivo Excel:', error);
-        res.json({
-            alert: true,
-            alertTitle: "Error al insertar los datos en la base de datos.",
-            alertMessage: error.message,
-            alertIcon: 'error',
-            showConfirmButton: true,
-            timer: false,
-            ruta: '#'
-        });
+        enviarRespuestaSweetAlert(res, "Error al insertar los datos en el servidor", error.message, 'error', true, false, '');
     } finally {
-        // Eliminamos el archivo temporal
-        if (fs.existsSync(rutaArchivoExcel)) {
-            fs.unlinkSync(rutaArchivoExcel);
-            console.log("Se eliminó el archivo temporal");
-        } else {
-            console.log("El archivo temporal no existe");
-        }  
+        eliminarArchivo(req.files.archivoExcel.tempFilePath);
     }
 };
+
+// Función para eliminar un archivo
+function eliminarArchivo(rutaArchivo) {
+    fs.unlink(rutaArchivo, (error) => {
+        if (error) {
+            console.error('Error al eliminar el archivo:', error);
+        } else {
+            console.log('Archivo eliminado correctamente.');
+        }
+    });
+}

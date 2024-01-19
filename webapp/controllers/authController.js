@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const bcryptjs = require('bcryptjs')
 const conexion = require('../database/db')
 const { promisify } = require('util')
+const { renderizarRespuestaSweetAlert } = require('../controllers/utils')
 
 // Funcion de registro de usuarios (Todos con rol usuario)
 exports.register = async (req, res) => {
@@ -12,42 +13,18 @@ exports.register = async (req, res) => {
         const pass = req.body.pass
         let passHash = await bcryptjs.hash(pass, 8)
         if (!name || !email || !user || !pass) {
-            res.render('pages/register', {
-                alert: true,
-                alertTitle: "Advertencia",
-                alertMessage: "Ingrese su nombre completo, email, nombre de usuario y contraseña",
-                alertIcon: 'info',
-                showConfirmButton: true,
-                timer: false,
-                ruta: 'register'
-            })
+            renderizarRespuestaSweetAlert(res, 'pages/register', "Advertencia", "Ingrese su nombre completo, email, nombre de usuario y contraseña", 'info', true, false, 'register')
         } else {
             conexion.query('INSERT INTO users SET ?', { name: name, email: email, user: user, pass: passHash }, async (error, results) => {
                 if (error) {
-                    if (error.sqlMessage.includes("Duplicate entry")) {
+                    if (error.message.includes("Duplicate entry")) {
                         mensaje = "El nombre de usuario o email ya está en uso";
                     } else {
-                        mensaje = "Ha ocurrido un error inesperado: " + error.sqlMessage + " ";
+                        mensaje = "Ha ocurrido un error inesperado: " + error.message + " ";
                     }
-                    res.render('pages/register', {
-                        alert: true,
-                        alertTitle: "Advertencia",
-                        alertMessage: mensaje,
-                        alertIcon: 'info',
-                        showConfirmButton: true,
-                        timer: false,
-                        ruta: 'register'
-                    });
+                    renderizarRespuestaSweetAlert(res, 'pages/register', "Advertencia", mensaje, 'info', true, false, 'register')
                 } else {
-                    res.render('pages/register', {
-                        alert: true,
-                        alertTitle: "Registro exitoso",
-                        alertIcon: 'success',
-                        alertMessage: "Te has registrado correctamente. ¡Inicia sesión!",
-                        showConfirmButton: false,
-                        timer: 800,
-                        ruta: ''
-                    });
+                    renderizarRespuestaSweetAlert(res, 'pages/register', "Registro exitoso", "Te has registrado correctamente. ¡Inicia sesión!", 'success', false, 800, '')
                 }
             });
         }
@@ -63,28 +40,12 @@ exports.login = async (req, res) => {
         const pass = req.body.pass
 
         if (!user || !pass) {
-            res.render('pages/login', {
-                alert: true,
-                alertTitle: "Advertencia",
-                alertMessage: "Ingrese su nombre de usuario y contraseña",
-                alertIcon: 'info',
-                showConfirmButton: true,
-                timer: false,
-                ruta: 'login'
-            })
+            renderizarRespuestaSweetAlert(res, 'pages/login', "Advertencia", "Ingrese su nombre de usuario y contraseña", 'info', true, false, 'login')
         } else {
             conexion.query('SELECT * FROM users WHERE user = ?', [user], async (error, results) => {
                 // Validacion de usuario con credenciales incorrectas
                 if (results.length == 0 || !(await bcryptjs.compare(pass, results[0].pass))) {
-                    res.render('pages/login', {
-                        alert: true,
-                        alertTitle: "Error",
-                        alertMessage: "Usuario y/o Password incorrectas",
-                        alertIcon: 'error',
-                        showConfirmButton: true,
-                        timer: false,
-                        ruta: 'login'
-                    })
+                    renderizarRespuestaSweetAlert(res, 'pages/login', "Error", "Usuario y/o Password incorrectas", 'error', true, false, 'login')
                 } else {
                     // Inicio de sesión OK
                     const id = results[0].id
@@ -100,16 +61,7 @@ exports.login = async (req, res) => {
                         httpOnly: true
                     }
                     res.cookie('jwt', token, cookiesOptions)
-
-                    res.render('pages/login', {
-                        alert: true,
-                        alertTitle: "Conexión exitosa",
-                        alertMessage: "¡LOGIN CORRECTO!",
-                        alertIcon: 'success',
-                        showConfirmButton: false,
-                        timer: 800,
-                        ruta: ''
-                    })
+                    renderizarRespuestaSweetAlert(res, 'pages/login', "Conexión exitosa", "¡LOGIN CORRECTO!", 'success', false, 800, '')
                 }
             })
         }

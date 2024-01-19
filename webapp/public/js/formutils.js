@@ -27,8 +27,8 @@ $(document).ready(function () {
     }
 
     // Función para cargar los departamentos según el país seleccionado
-    function cargarDepartamentos(paisId) {
-        $('#departamento_residencia, #departamento_residencia_editar').empty();
+    function cargarDepartamentos(paisId, idSelector) {
+        $(idSelector).empty();
         $.ajax({
             url: `http://api.geonames.org/childrenJSON?geonameId=${paisId}&username=sebasbp`,
             dataType: 'json',
@@ -36,7 +36,7 @@ $(document).ready(function () {
                 console.log("Cargando departamentos: ", data);
                 for (let i = 0; i < data.geonames.length; i++) {
                     if (data.geonames[i].fcode === 'ADM1') {
-                        $('#departamento_residencia, #departamento_residencia_editar').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
+                        $(idSelector).append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
                     }
                 }
                 $('#departamento_residencia').trigger('change');
@@ -45,8 +45,8 @@ $(document).ready(function () {
     }
 
     // Función para cargar las ciudades según el departamento seleccionado
-    function cargarCiudades(deptoId) {
-        $('#ciudad_residencia, #ciudad_residencia_editar').empty();
+    function cargarCiudades(deptoId, idSelector) {
+        $(idSelector).empty();
         $.ajax({
             url: `http://api.geonames.org/childrenJSON?geonameId=${deptoId}&username=sebasbp`,
             dataType: 'json',
@@ -55,7 +55,7 @@ $(document).ready(function () {
                     console.log("Cargando ciudades: ", data);
                     for (let i = 0; i < data.geonames.length; i++) {
                         if (data.geonames[i].fcode === 'ADM2') {
-                            $('#ciudad_residencia, #ciudad_residencia_editar').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
+                            $(idSelector).append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
                         }
                     }
                 } else {
@@ -65,16 +65,28 @@ $(document).ready(function () {
         });
     }
 
-    // Evento cuando se selecciona un país
-    $('#pais_residencia, #pais_residencia_editar').on('change', function () {
+    // Evento cuando se selecciona un país form Nuevo Egresado
+    $('#pais_residencia').on('change', function () {
         const paisId = $(this).val();
-        cargarDepartamentos(paisId);
+        cargarDepartamentos(paisId, "#departamento_residencia");
     });
 
-    // Evento cuando se selecciona un departamento
-    $('#departamento_residencia, #departamento_residencia_editar').on('change', function () {
+    // Evento cuando se selecciona un departamento form Nuevo Egresado
+    $('#departamento_residencia').on('change', function () {
         const deptoId = $(this).val();
-        cargarCiudades(deptoId);
+        cargarCiudades(deptoId, "#ciudad_residencia");
+    });
+
+    // Evento cuando se selecciona un país form Editar Egresado
+    $('#pais_residencia_editar').on('change', function () {
+        const paisId = $(this).val();
+        cargarDepartamentos(paisId, "#departamento_residencia_editar");
+    });
+
+    // Evento cuando se selecciona un departamento form Editar Egresado
+    $('#departamento_residencia_editar').on('change', function () {
+        const deptoId = $(this).val();
+        cargarCiudades(deptoId, "#ciudad_residencia_editar");
     });
 
     // Cargar lista de países al cargar la página
@@ -137,7 +149,4 @@ $(document).ready(function () {
         }, 200);
     });
 
-    function eliminarEgresadoEmail(email) {
-        document.getElementById('email_eliminar').value = email;
-    }
 });

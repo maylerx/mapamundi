@@ -16,7 +16,6 @@
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.41.0",
     "cookie-parser": "^1.4.6",
-    "csv-writer": "^1.6.0",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "exceljs": "^4.4.0",

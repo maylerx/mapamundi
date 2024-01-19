@@ -29,6 +29,16 @@ $(document).ready(function () {
         var fileInput = $(this)[0];
         var file = fileInput.files[0];
 
+        // Verificar que el file tenga la extensión .xlsx
+        if (file.name.split('.').pop() != 'xlsx') {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "El archivo seleccionado no es un archivo Excel.",
+            });
+            return;
+        }
+
         if (file) {
             // Crear objeto FormData y agregar el archivo
             var formData = new FormData();

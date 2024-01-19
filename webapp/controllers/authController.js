@@ -53,8 +53,6 @@ exports.login = async (req, res) => {
                         expiresIn: process.env.JWT_TIEMPO_EXPIRA
                     })
 
-                    console.log("TOKEN: " + token + " para el USUARIO : " + user)
-
                     // Definicion de opciones de la cookie como fecha de expiracion y httpOnly
                     const cookiesOptions = {
                         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),

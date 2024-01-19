@@ -1,5 +1,5 @@
 const conexion = require('../database/db')
-const uploadImage = require('./cloudinaryController');
+const { uploadImage, deleteImage } = require('./cloudinaryController');
 const axios = require('axios');
 const { enviarRespuestaSweetAlert } = require('../controllers/utils')
 
@@ -66,7 +66,6 @@ exports.agregarEgresado = async (req, res) => {
                 departamento_residencia: departamento_name,
                 pais_residencia: pais_name,
                 year_graduacion: year_graduacion,
-                imagen_url: rutaWebImagen,
                 coord_x: coord_x,
                 coord_y: coord_y,
                 numero_telefono: numero_telefono,
@@ -197,6 +196,20 @@ exports.editarEgresado = async (req, res) => {
                     }
                 } else {
                     if (req.files !== null) {
+
+                        var imagen_url_borrar = null;
+
+                        // Obtener la URL de la imagen anterior para eliminarla de Cloudinary
+                        conexion.query('SELECT imagen_url FROM egresados WHERE email = ?', [email_original], async (error, results) => {
+                            if (error) {
+                                console.log(error);
+                                enviarRespuestaSweetAlert(res, "Error en la base de datos", error.message, 'error', true, false, '');
+                                return;
+                            } else {
+                                imagen_url_borrar = results[0].imagen_url;
+                            }
+                        });
+
                         // Subir imagen a Cloudinary después de que el query sea exitoso
                         const tempFilePath = req.files.imagen.tempFilePath;
                         try {
@@ -204,11 +217,20 @@ exports.editarEgresado = async (req, res) => {
                             const rutaWebImagen = result.url;
 
                             // Actualizar la fila en la base de datos con la URL de la imagen
-                            conexion.query('UPDATE egresados SET imagen_url = ? WHERE email = ?', [rutaWebImagen, email], (updateError) => {
+                            conexion.query('UPDATE egresados SET imagen_url = ? WHERE email = ?', [rutaWebImagen, email], async (updateError) => {
                                 if (updateError) {
                                     console.log(updateError);
                                     enviarRespuestaSweetAlert(res, "Error en la base de datos", updateError.message, 'error', true, false, '');
                                     return;
+                                }
+
+                                // Eliminar la imagen anterior de Cloudinary
+                                // Eliminar la imagen de Cloudinary
+                                try {
+                                    await deleteImage(imagen_url_borrar);
+                                } catch (deleteError) {
+                                    console.log(deleteError);
+                                    enviarRespuestaSweetAlert(res, "Error al eliminar la imagen", deleteError.message, 'error', true, false, '');
                                 }
 
                                 console.log("SE HAN ACTUALIZADO LOS DATOS DEL GRADUADO CORRECTAMENTE");
@@ -267,12 +289,33 @@ function obtenerNombreUbicacionPorId(tipo, id) {
 exports.eliminarEgresado = async (req, res) => {
     try {
         const { email } = req.body;
+        imagen_url_borrar = null;
 
-        conexion.query('DELETE FROM egresados WHERE email = ?', [email], (error) => {
+        // Obtener la URL de la imagen para eliminarla de Cloudinary
+        conexion.query('SELECT imagen_url FROM egresados WHERE email = ?', [email], async (error, results) => {
+            if (error) {
+                console.log(error);
+                enviarRespuestaSweetAlert(res, "Error en la base de datos", error.message, 'error', true, false, '');
+                return;
+            } else {
+                imagen_url_borrar = results[0].imagen_url;
+            }
+        });
+
+        // Eliminar el egresado de la base de datos
+        conexion.query('DELETE FROM egresados WHERE email = ?', [email], async (error) => {
             if (error) {
                 console.log(error);
                 enviarRespuestaSweetAlert(res, "Error en la base de datos", error.message, 'error', true, false, '');
             } else {
+                // Eliminar la imagen de Cloudinary
+                try {
+                    await deleteImage(imagen_url_borrar);
+                } catch (deleteError) {
+                    console.log(deleteError);
+                    enviarRespuestaSweetAlert(res, "Error al eliminar la imagen", deleteError.message, 'error', true, false, '');
+                }
+
                 console.log("SE HA ELIMINADO UN GRADUADO CORRECTAMENTE");
                 enviarRespuestaSweetAlert(res, "Proceso exitoso", "Los datos del graduado se han eliminado correctamente", 'success', false, 800, '#');
             }

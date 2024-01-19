@@ -25,4 +25,6 @@ rcidencia, año por año de graduacion y agregar numero de telefono | OK
 
 --- AMBIGUAS ---
 5) que el buscador de egresador tambien se peuda buscar por otros parametros como areas | ????
+
+PUEDO HACER QUE BUSQUE POR EMAIL O NUMERO DE TELEFONO QUE SON LOS UNICOS PARAMETROS UNICOS
 ----------------

@@ -74,10 +74,15 @@
                   </span>
                 <% } %> 
               </h3>
+              <h5>Email de Usuario:
+                <span class="badge" id="email_user" style="background-color: #515151; color:rgb(255, 255, 255)">
+                  <%= user.email %>
+                </span>
+              </h5>
             </div>
             <% if (user.rol_id===1) { %> 
               <div class="col">
-                <h3>Búsqueda de graduados: </h3>
+                <h3>Búsqueda de graduados:</h3>
                 <input id="egresado_buscar" name="egresado_buscar" type="text" class="form-control"
                   placeholder="Ingresa el nombre completo del egresado">
               </div>
@@ -148,8 +153,13 @@
     </div>
   </div>
 
-  <%- include ('../partials/scriptsimports.ejs') %>
-
+  <!-- Scripts -->
+  <% if (user.rol_id===1) { %>
+    <%- include ('../partials/scriptsimportsadmin.ejs') %>
+  <% } else if (user.rol_id===2) { %> 
+    <%- include ('../partials/scriptsimportsuser.ejs') %>
+  <% } %>
+  
   <!-- NO TOCAR ESTO AUNQUE MARQUE ERROR DEL EDITOR YA QUE EL SWEET ALERT SE USA CON
   EL EJS INTERPOLANDO LAS RESPUESTAS DE EVENTOS -->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

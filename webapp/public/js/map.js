@@ -90,11 +90,13 @@ document.getElementById('egresado_buscar').addEventListener('keydown', function 
 });
 
 // Para la busqueda de egresados en el mapa dado su nombre completo
-function buscarEgresadoMapa(nombreCompleto) {
+function buscarEgresadoMapa(parametroBuscar) {
     obtenerDatosEgresados().then((egresados) => {
         var encontrado = false;
         egresados.forEach((egresado) => {
-            if ((egresado.nombres + ' ' + egresado.apellidos).toLowerCase().replace(/\s/g, '') === nombreCompleto.toLowerCase().replace(/\s/g, '')) {
+            if ((egresado.nombres + ' ' + egresado.apellidos).toLowerCase().replace(/\s/g, '') === parametroBuscar.toLowerCase().replace(/\s/g, '')
+                || (egresado.email).toLowerCase().replace(/\s/g, '') === parametroBuscar.toLowerCase().replace(/\s/g, '')
+                || (egresado.numero_telefono).toLowerCase().replace(/\s/g, '') === parametroBuscar.toLowerCase().replace(/\s/g, '')) {
                 map.flyTo([egresado.coord_x, egresado.coord_y], 16);
 
                 const coordenadasObjetivo = [egresado.coord_x, egresado.coord_y];

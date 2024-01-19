@@ -19,4 +19,16 @@ async function uploadImage(filePath){
     });
 }
 
-module.exports = uploadImage;
+async function deleteImage(imageUrl) {
+    const list_url_parts = imageUrl.split('/');
+    const imagen_id = list_url_parts[list_url_parts.length - 1].split('.')[0];
+    console.log(imagen_id);
+
+    return await cloudinary.uploader.destroy("egresados/"+imagen_id , { invalidate: true }, (error, result) => {
+        if (error) {
+            console.log("ERROR: ",error);
+        }
+    });
+}
+
+module.exports = { uploadImage, deleteImage };

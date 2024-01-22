@@ -297,7 +297,7 @@ async function obtenerNombreUbicacionPorId(tipo, id) {
 export async function eliminarEgresado(req, res) {
     try {
         const { email } = req.body;
-        imagen_url_borrar = null;
+        var imagen_url_borrar = null;
 
         // Obtener la URL de la imagen para eliminarla de Cloudinary
         conexion.query('SELECT imagen_url FROM egresados WHERE email = ?', [email], async (error, results) => {

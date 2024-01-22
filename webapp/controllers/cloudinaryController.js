@@ -13,8 +13,8 @@ export async function uploadImage(filePath){
         if (error) {
             console.log(error);
         } else {
-            // Borra el archiv temporal
-            fs.unlink.fs.ync(filePath);
+            // Borra el archivo temporal
+            fs.unlinkSync(filePath);
         }
     });
 }

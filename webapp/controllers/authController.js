@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken')
-const bcryptjs = require('bcryptjs')
-const conexion = require('../database/db')
-const { promisify } = require('util')
-const { renderizarRespuestaSweetAlert } = require('../controllers/utils')
+import jwt from 'jsonwebtoken'
+import bcryptjs from 'bcryptjs'
+import conexion from '../database/db.js'
+import { promisify } from 'util'
+import { renderizarRespuestaSweetAlert } from '../controllers/utils.js'
 
 // Funcion de registro de usuarios (Todos con rol usuario)
-exports.register = async (req, res) => {
+export async function register(req, res) {
     try {
         const name = req.body.name
         const email = req.body.email
@@ -34,7 +34,7 @@ exports.register = async (req, res) => {
 }
 
 // Funcion de login de usuarios
-exports.login = async (req, res) => {
+export async function login(req, res) {
     try {
         const user = req.body.user
         const pass = req.body.pass
@@ -68,7 +68,7 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.isAuthenticated = async (req, res, next) => {
+export async function isAuthenticated(req, res, next) {
     if (req.cookies.jwt) {
         try {
             const decodificada = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRETO)
@@ -86,22 +86,9 @@ exports.isAuthenticated = async (req, res, next) => {
     }
 }
 
-exports.logout = (req, res) => {
+export function logout(req, res) {
     res.clearCookie('jwt')
     return res.redirect('/')
 }
 
-exports.existeEgresadoRegistrado = (req, res) => {
-    const email = req.body.email
-    conexion.query('SELECT * FROM egresados WHERE email = ?', [email], (error, results) => {
-        if (error) {
-            console.log(error)
-        } else {
-            if (results.length > 0) {
-                res.json({ existe: true })
-            } else {
-                res.json({ existe: false })
-            }
-        }
-    })
-}
+export default { register, login, isAuthenticated, logout }

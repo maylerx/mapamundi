@@ -9,16 +9,16 @@ $(document).ready(function () {
     // Objetivo: llenar los selectores de pais, departamento y ciudad
 
     // Función para llenar el selector de países
-    function cargarPaises() {
+    function cargarPaises(idSelector) {
         $.ajax({
             url: `http://api.geonames.org/countryInfoJSON?username=sebasbp`,
             dataType: 'json',
             success: function (data) {
                 console.log("Cargando paises: ", data);
                 for (let i = 0; i < data.geonames.length; i++) {
-                    $('#pais_residencia, #pais_residencia_editar').append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].countryName}</option>`);
+                    $(idSelector).append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].countryName}</option>`);
                 }
-                $('#pais_residencia').trigger('change');
+                $(idSelector).trigger('change');
             },
             error: function (error) {
                 console.log("Error cargando paises: ", error);
@@ -39,7 +39,25 @@ $(document).ready(function () {
                         $(idSelector).append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
                     }
                 }
-                $('#departamento_residencia').trigger('change');
+                $(idSelector).trigger('change');
+            }
+        });
+    }
+
+    // Función para cargar los departamentos según el país seleccionado
+    function cargarDepartamentos(paisId, idSelector) {
+        $(idSelector).empty();
+        $.ajax({
+            url: `http://api.geonames.org/childrenJSON?geonameId=${paisId}&username=sebasbp`,
+            dataType: 'json',
+            success: function (data) {
+                console.log("Cargando departamentos: ", data);
+                for (let i = 0; i < data.geonames.length; i++) {
+                    if (data.geonames[i].fcode === 'ADM1') {
+                        $(idSelector).append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
+                    }
+                }
+                $(idSelector).trigger('change');
             }
         });
     }
@@ -54,11 +72,12 @@ $(document).ready(function () {
                 if (data.geonames && data.geonames.length > 0) {
                     console.log("Cargando ciudades: ", data);
                     for (let i = 0; i < data.geonames.length; i++) {
-                        if (data.geonames[i].fcode === 'ADM2') {
+                        if (data.geonames[i].fcode === 'ADM2' || data.geonames[i].fcode === 'PPLC' || data.geonames[i].fcode === 'PPLA') {
                             $(idSelector).append(`<option value="${data.geonames[i].geonameId}">${data.geonames[i].name}</option>`);
                         }
                     }
                 } else {
+                    $(idSelector).append(`<option value="SinCiudad">Sin Ciudad</option>`);
                     console.error('La propiedad geonames es indefinida o vacía en la respuesta del servidor.');
                 }
             }
@@ -90,7 +109,7 @@ $(document).ready(function () {
     });
 
     // Cargar lista de países al cargar la página
-    cargarPaises();
+    cargarPaises("#pais_residencia");
 
     // Para obtener los datos de un egresado dado su email
     function obtenerEgresadoEmail(email) {
@@ -105,17 +124,6 @@ $(document).ready(function () {
                     document.getElementById('barrio_vereda_editar').value = egresado.barrio_vereda;
                     document.getElementById('codigo_postal_editar').value = egresado.codigo_postal;
                     document.getElementById('detalles_direccion_editar').value = egresado.detalles_direccion;
-                    seleccionarOpcionPorTexto('pais_residencia_editar', egresado.pais_residencia);
-                    // Simular el evento change para desencadenar la lógica asociada
-                    $('#pais_residencia_editar').trigger('change');
-                    setTimeout(function () {
-                        seleccionarOpcionPorTexto('departamento_residencia_editar', egresado.departamento_residencia);
-                    }, 1500);
-                    setTimeout(function () {
-                        // Simular el evento change para desencadenar la lógica asociada
-                        $('#departamento_residencia_editar').trigger('change');
-                        seleccionarOpcionPorTexto('ciudad_residencia_editar', egresado.ciudad_residencia);
-                    }, 2000);
                     document.getElementById('email_editar').value = egresado.email;
                     document.getElementById('numero_telefono_editar').value = egresado.numero_telefono;
                     document.getElementById('year_graduacion_editar').value = egresado.year_graduacion;
@@ -124,9 +132,29 @@ $(document).ready(function () {
                     document.getElementById('cargo_actual_editar').value = egresado.cargo_actual;
                     document.getElementById('empresa_url_editar').value = egresado.empresa_url;
                     document.getElementById('datos_publicos_editar').checked = egresado.datos_publicos === 1;
+                    rellenarDatosGeograficosEgresado(egresado.pais_residencia, egresado.departamento_residencia, egresado.ciudad_residencia);
                 }
             });
         });
+    }
+
+    function rellenarDatosGeograficosEgresado(pais_residencia, departamento_residencia, ciudad_residencia) {
+        // Esperar 1 segundo para que se carguen los datos de los selectores
+        setTimeout(function () {
+            seleccionarOpcionPorTexto('pais_residencia_editar', pais_residencia);
+            $('#pais_residencia_editar').trigger('change');
+            
+            // // Esperar 1 segundo para que se carguen los datos de los selectores de pais
+            setTimeout(function () {
+                seleccionarOpcionPorTexto('departamento_residencia_editar', departamento_residencia);
+                $('#departamento_residencia_editar').trigger('change');
+            }, 1500);
+            
+            // Esperar 1 segundo para que se carguen los datos de los selectores de departamento
+            setTimeout(function () {
+                seleccionarOpcionPorTexto('ciudad_residencia_editar', ciudad_residencia);
+            }, 3000);
+        }, 2000);
     }
 
     // Funcion auxiliar para seleccionar una opcion de un select dado su texto
@@ -143,8 +171,9 @@ $(document).ready(function () {
 
     // Ejecutar la funcion de obtenerEgresadoEmail al cargar el modal de editar egresado
     $('#modalEditarEgresado').on('show.bs.modal', function () {
-        const email = document.getElementById('email_popup').innerHTML;
         setTimeout(function () {
+            cargarPaises("#pais_residencia_editar");
+            const email = document.getElementById('email_popup').innerHTML;
             obtenerEgresadoEmail(email);
         }, 200);
     });

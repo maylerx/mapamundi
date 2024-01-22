@@ -1,5 +1,5 @@
-const cloudinary = require('cloudinary').v2
-const fs = require('fs');
+import { v2 as cloudinary } from 'cloudinary'
+import fs from 'fs'
 
 // Servicio Cloudinary
 cloudinary.config({
@@ -8,18 +8,18 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-async function uploadImage(filePath){
+export async function uploadImage(filePath){
     return await cloudinary.uploader.upload(filePath, { folder: 'egresados' }, (error, result) => {
         if (error) {
             console.log(error);
         } else {
             // Borra el archiv temporal
-            fs.unlinkSync(filePath);
+            fs.unlink.fs.ync(filePath);
         }
     });
 }
 
-async function deleteImage(imageUrl) {
+export async function deleteImage(imageUrl) {
     const list_url_parts = imageUrl.split('/');
     const imagen_id = list_url_parts[list_url_parts.length - 1].split('.')[0];
     console.log(imagen_id);
@@ -30,5 +30,3 @@ async function deleteImage(imageUrl) {
         }
     });
 }
-
-module.exports = { uploadImage, deleteImage };

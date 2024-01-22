@@ -1,6 +1,6 @@
-const conexion = require('../database/db');
-const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
+import conexion from '../database/db.js'
+import jwt from 'jsonwebtoken'
+import { promisify } from 'util'
 
 const checkRoleMiddleware = async (req, res, next) => {
     try {
@@ -21,4 +21,4 @@ const checkRoleMiddleware = async (req, res, next) => {
     next();
 }
 
-module.exports = checkRoleMiddleware;
+export default checkRoleMiddleware;

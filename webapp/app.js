@@ -1,7 +1,8 @@
-const express = require('express')
-const dotenv = require('dotenv')
-const cookieParser = require('cookie-parser')
-const fileUpload = require('express-fileupload')
+import 'dotenv/config'
+import express from 'express'
+import cookieParser from 'cookie-parser'
+import fileUpload from 'express-fileupload'
+import router from './routes/router.js'
 
 const app = express()
 
@@ -19,14 +20,14 @@ app.use(fileUpload({
     tempFileDir: './uploads'
 }))
 
-//seteamos las variables de entorno
-dotenv.config({path: './env/.env'})
+// //seteamos las variables de entorno
+// dotenv.config({path: './env/.env'})
 
 //para poder trabajar con las cookies
 app.use(cookieParser())
 
 //llamar al router
-app.use('/', require('./routes/router'))
+app.use('/', router)
 
 //Para eliminar la cache 
 app.use(function(req, res, next) {

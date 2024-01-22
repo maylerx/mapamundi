@@ -1,11 +1,11 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
 
-const authController = require('../controllers/authController')
-const mapController = require('../controllers/mapController')
-const egresadoController = require('../controllers/egresadoController')
-const excelController = require('../controllers/excelController');
-const checkRoleMiddleware = require('../middlewares/checkRolMiddleware');
+import authController from '../controllers/authController.js'
+import mapController from '../controllers/mapController.js'
+import egresadoController from '../controllers/egresadoController.js'
+import excelController from '../controllers/excelController.js'
+import checkRoleMiddleware from '../middlewares/checkRolMiddleware.js'
 
 //router para las vistas
 router.get('/', authController.isAuthenticated, (req, res)=>{    
@@ -29,4 +29,4 @@ router.get('/datosEgresados', checkRoleMiddleware, mapController.datosEgresados)
 router.get('/exportarExcel', excelController.exportarExcel);
 router.post('/importarExcel', excelController.importarExcel);
 
-module.exports = router
+export default router

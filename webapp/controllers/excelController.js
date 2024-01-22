@@ -1,10 +1,10 @@
-const ExcelJS = require('exceljs');
-const conexion = require('../database/db');
-const fs = require('fs');
-const { enviarRespuestaSweetAlert } = require('../controllers/utils')
+import ExcelJS from 'exceljs'
+import conexion from '../database/db.js'
+import fs from 'fs'
+import { enviarRespuestaSweetAlert } from '../controllers/utils.js'
 
 // Controlador para la exportación de datos a Excel
-exports.exportarExcel = (req, res) => {
+export async function exportarExcel(req, res) {
     const nombreArchivoExcel = 'downloads/graduados.xlsx';
 
     try {
@@ -53,7 +53,7 @@ exports.exportarExcel = (req, res) => {
 };
 
 // Controlador para la importacion de los datos de Excel al servidor
-exports.importarExcel = async (req, res) => {
+export async function importarExcel(req, res) {
     try {
         // Verificar que se haya seleccionado un archivo
         if (!req.files || Object.keys(req.files).length === 0) {
@@ -133,3 +133,5 @@ function eliminarArchivo(rutaArchivo) {
         }
     });
 }
+
+export default { exportarExcel, importarExcel }

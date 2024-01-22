@@ -1,10 +1,10 @@
-const conexion = require('../database/db')
-const { uploadImage, deleteImage } = require('./cloudinaryController');
-const axios = require('axios');
-const { enviarRespuestaSweetAlert } = require('../controllers/utils')
+import conexion from '../database/db.js'
+import { uploadImage, deleteImage } from './cloudinaryController.js'
+import axios from 'axios'
+import { enviarRespuestaSweetAlert } from '../controllers/utils.js'
 
 // Funcion para agregar un nuevo egresado a la base de datos
-exports.agregarEgresado = async (req, res) => {
+export async function agregarEgresado(req, res) {
     try {
         const { nombres,
             apellidos,
@@ -116,7 +116,7 @@ exports.agregarEgresado = async (req, res) => {
 }
 
 // Funcion para agregar un nuevo egresado a la base de datos
-exports.editarEgresado = async (req, res) => {
+export async function editarEgresado(req, res) {
     try {
         const { nombres,
             apellidos,
@@ -258,7 +258,7 @@ exports.editarEgresado = async (req, res) => {
 }
 
 // Funcion auxiliar para obtener el nombre de una ubicacion por su ID
-function obtenerNombreUbicacionPorId(tipo, id) {
+async function obtenerNombreUbicacionPorId(tipo, id) {
     return axios.get(`http://api.geonames.org/getJSON?geonameId=${id}&username=sebasbp`)
         .then(response => {
             const data = response.data;
@@ -275,18 +275,26 @@ function obtenerNombreUbicacionPorId(tipo, id) {
                         return null;
                 }
             } else {
-                console.log(`No se encontraron datos para el ID ${id}`);
-                return null;
+                if (tipo === 'ciudad') {
+                    return "Sin Ciudad";
+                } else {
+                    console.log(`No se encontraron datos para el ID ${id}`);
+                    return null;
+                }
             }
         })
         .catch(error => {
-            console.error(`Error al obtener los datos: ${error}`);
-            return null;
+            if (tipo === 'ciudad') {
+                return "Sin Ciudad";
+            } else {
+                console.error(`Error al obtener los datos: ${error}`);
+                return null;
+            }
         });
 }
 
 // Funcion para eliminar un egresado de la base de datos dado el email
-exports.eliminarEgresado = async (req, res) => {
+export async function eliminarEgresado(req, res) {
     try {
         const { email } = req.body;
         imagen_url_borrar = null;
@@ -325,3 +333,5 @@ exports.eliminarEgresado = async (req, res) => {
         enviarRespuestaSweetAlert(res, "Error en la base de datos", error.message, 'error', true, false, '');
     }
 }
+
+export default { agregarEgresado, editarEgresado, eliminarEgresado }

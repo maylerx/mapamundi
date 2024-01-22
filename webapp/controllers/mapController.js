@@ -1,6 +1,6 @@
-const conexion = require('../database/db')
+import conexion from '../database/db.js'
 
-exports.datosEgresados = async (req, res) => {
+export async function datosEgresados(req, res) {
     try {
         const query = `
             SELECT 
@@ -43,3 +43,5 @@ exports.datosEgresados = async (req, res) => {
         return res.json(error);
     }
 }
+
+export default { datosEgresados };
